@@ -2,24 +2,18 @@
 name = "garage-discordbot"
 version = "0.1.0"
 description = "Discord bot for Jim's Garage"
-authors = [
-    {name = "cyberops7",email = "18562612+cyberops7@users.noreply.github.com"}
-]
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
-    "discord (>=2.3.2,<3.0.0)",
-    "dotenv (>=0.9.9,<0.10.0)"
+    "discord>=2.3.2",
+    "dotenv>=0.9.9",
 ]
 
-[tool.poetry]
-package-mode = false
-
-[tool.poetry.group.dev.dependencies]
-isort = "^6.0.0"
-mypy = "^1.15.0"
-ruff = "^0.9.6"
-
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "isort>=6.0.0",
+    "mypy>=1.15.0",
+    "pylint>=3.3.4",
+    "pyre>=1.12.5",
+    "ruff>=0.9.7",
+]

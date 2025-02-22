@@ -1,9 +1,11 @@
 __pycache__/
 .git/
+../.github/
 .mypy_cache/
 .ruff_cache/
 .venv/
-build/
+dev/
 logs/
 .env
 .gitignore
+Makefile
