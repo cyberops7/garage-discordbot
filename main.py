@@ -13,10 +13,12 @@ from dotenv import load_dotenv
 from lib.bot import DiscordBot
 from lib.logger_setup import configure_logger
 
+
 # TODO: README
 # TODO: run isort, mypy, and ruff on build
 # TODO: set up GitHub Actions for building, checking/linting, and publishing the image
 # TODO: logging in the logging library
+# TODO: kubernetes files (linked to from internal k3s repo
 
 
 def main() -> None:
@@ -30,8 +32,6 @@ def main() -> None:
 
     # Retrieve bot token
     logger.info("Retrieving bot token...")
-    # bot_token: str = os.getenv("BOT_TOKEN")
-    # if not bot_token:
     if not (bot_token := os.getenv("BOT_TOKEN")):
         logger.error("BOT_TOKEN is not set")
         sys.exit(1)

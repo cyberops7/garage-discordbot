@@ -1,6 +1,11 @@
-## Dev Environment Setup
+### Contributing Guidelines
+**Code Quality**
+* TBD
 
-Ask AI: what instructions would I give collaborators for using the pyproject.toml and poetry.lock in the repo for setting up their own dev environment?
+**Testing**
+* TBD
+
+### Dev Environment Setup
 
 * Install `uv`
   * https://docs.astral.sh/uv/getting-started/installation/
@@ -10,7 +15,20 @@ Ask AI: what instructions would I give collaborators for using the pyproject.tom
   * `uv sync --frozen`
 
 
+* Create your own `.env` file
+  * `cp sample.env .env`
+  * Put your bot token in the new .env file (this file is ignored by Git)
+  (or provide it to the shell environment, Docker container, etc. in some other way)
+
+### Updating dependencies
+If you want to upgrade dependencies and test for compatibility, 
+use `uv` to upgrade them all or one at a time.  
+Do thorough compatibility testing before submitting a PR 
+with updated dependencies.
+
 * Upgrading all packages
   * `uv lock --upgrade`
 * Upgrading a package
   * `uv lock --upgrade-package package-name`
+
+
