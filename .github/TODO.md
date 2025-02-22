@@ -13,6 +13,8 @@
 - [ ] CONTRIBUTING
 - [ ] `make check`
   - Run linters and checkers 
+- [x] `make deps`
+  - Check that dev dependencies are installed
 - [x] `make clean`
   - Clean up old Docker containers and buildx builders
   - Run as a prerequisite for `make run`, `make build`
@@ -26,6 +28,7 @@
   - [ ] Accepted PRs
     - [ ] Build and publish image to ghcr
 - Logging
+  - Logs in bash files (colorized)
   - [ ] Add more logging everywhere
   - [ ] Tune discord's noisy logs
 - Kubernetes
