@@ -11,5 +11,5 @@ else
   echo "Using tag: ${TAG}"
 fi
 
-docker run -it -d --env-file .env \
+docker run --name bot-test -it -d --env-file .env \
   ghcr.io/cyberops7/discord-bot:"${TAG}"

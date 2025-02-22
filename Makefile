@@ -6,18 +6,21 @@ hello:
 	echo "Hello world"
 
 .PHONY: build
-build:
-	bash dev/build.sh $(TAG)
+build: clean
+	bash dev/build.sh --tag $(TAG)
+
+.PHONY: clean
+clean:
+	bash dev/clean.sh
 
 .PHONY: publish
-publish: build
-#publish:
-	bash dev/publish.sh $(TAG)
+publish: clean
+	bash dev/build.sh --tag $(TAG) --push
 
 .PHONY: run
-run:
-	bash dev/run.sh $(TAG)
+run: clean
+	bash dev/run.sh --tag $(TAG)
 
 .PHONY: scan
 scan:
-	bash dev/scan.sh $(TAG)
+	bash dev/scan.sh --tag $(TAG)

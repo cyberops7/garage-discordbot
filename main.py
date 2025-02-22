@@ -14,16 +14,9 @@ from lib.bot import DiscordBot
 from lib.logger_setup import configure_logger
 
 
-# TODO: README
-# TODO: run isort, mypy, and ruff on build
-# TODO: set up GitHub Actions for building, checking/linting, and publishing the image
-# TODO: logging in the logging library
-# TODO: kubernetes files (linked to from internal k3s repo
-
-
 def main() -> None:
     """Main driver function"""
-    # Load .env into system ENV
+    # Load .env contents into system ENV
     load_dotenv()
 
     # Set up logging
