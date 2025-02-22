@@ -11,9 +11,10 @@ CONTEXT="${SCRIPT_DIR}/.."
 DOCKERFILE="${SCRIPT_DIR}/Dockerfile"
 
 # Default values
-CACHE_FLAG="--no-cache" # Default behavior is to disable caching
-PUSH_FLAG="" # Default behavior is to build, but not push
-TAG="test-$(date +%Y%m%d)"
+CACHE_FLAG="--no-cache"     # Default behavior is to disable caching
+OUTPUT_TAR=""               # Default is no tarball output
+PUSH_FLAG=""                # Default behavior is to build, but not push
+TAG="test-$(date +%Y%m%d)"  # Default image tag
 
 # Parse arguments
 while [[ "$#" -gt 0 ]]; do
@@ -25,12 +26,23 @@ while [[ "$#" -gt 0 ]]; do
     --help|-h)
       echo "Usage: $0 [--tag <tag>] [--push] [--cache]"
       echo "Options:"
-      echo "  --help,  -h       Show this help message and exit."
-      echo "  --cache           Enable Docker caching (default is no cache)."
-      echo "  --push            Enable pushing the image to the registry."
-      echo "  --tag,   -t <tag>  Specify the image tag (default: 'test-YYYYMMDD')."
+      echo "  --help,  -h                   Show this help message and exit."
+      echo "  --cache                       Enable Docker caching (default is no cache)."
+      echo "  --output-tar <output-path>    Output the built image as a tarball to the specified file."
+      echo "  --push                        Enable pushing the image to the registry."
+      echo "  --tag,   -t <tag>             Specify the image tag (default: 'test-YYYYMMDD')."
       exit 0
       ;;
+    --output-tar)
+        # Check if the next argument exists and isn't empty or another flag
+        if [[ -z "$2" || "$2" == -* ]]; then
+            echo "Error: '--output-tar' option requires a file path."
+            echo "Run '$0 --help' for usage information."
+            exit 1
+        fi
+        OUTPUT_TAR="--output type=tar,dest=$2"
+        shift 2
+        ;;
     --push)
       PUSH_FLAG="--push"
       shift
@@ -73,6 +85,7 @@ docker buildx build \
   ${CACHE_FLAG} \
   ${PUSH_FLAG} \
   -f "${DOCKERFILE}" \
+  "${OUTPUT_TAR}" \
   "${CONTEXT}"
 
 docker buildx rm "${BUILDER_NAME}"

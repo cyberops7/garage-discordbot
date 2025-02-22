@@ -40,5 +40,6 @@ run: deps clean ## Run the Docker image locally
 	@bash $(SCRIPTS_DIR)/run.sh --tag $(TAG)
 
 .PHONY: scan
-scan: deps ## Scan the Docker image with TAG for vulnerabilities
+scan: deps clean ## Scan the Docker image with TAG for vulnerabilities
+	@bash $(SCRIPTS_DIR)/build.sh --tag $(TAG) --output-tar tmp/
 	@bash $(SCRIPTS_DIR)/scan.sh --tag $(TAG)
