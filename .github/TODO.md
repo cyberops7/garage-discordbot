@@ -13,13 +13,18 @@
 - [ ] CONTRIBUTING
 - [ ] `make check`
   - Run linters and checkers 
+- [x] `make clean`
+  - [x] Clean up old Docker containers and buildx builders
+  - [x] Run as a prerequisite for `make run`, `make build`
 - [x] `make deps`
   - Check that dev dependencies are installed
-- [x] `make clean`
-  - Clean up old Docker containers and buildx builders
-  - Run as a prerequisite for `make run`, `make build`
 - [x] `make publish`
-  - Make it a variant `build`, just with an extra flag to push the image
+  - [x] Make it a variant `build`, just with an extra flag to push the image
+- [x] `make run`
+  - Run the bot container locally
+- [ ] `make scan`
+  - [ ] Get other scanners working
+- [x] Bash logging library
 - GitHub Actions
   - [ ] PRs
     - [ ] Lint/check code
@@ -28,7 +33,7 @@
   - [ ] Accepted PRs
     - [ ] Build and publish image to ghcr
 - Logging
-  - Logs in bash files (colorized)
+  - [ ] Logs in bash files (colorized)
   - [ ] Add more logging everywhere
   - [ ] Tune discord's noisy logs
 - Kubernetes

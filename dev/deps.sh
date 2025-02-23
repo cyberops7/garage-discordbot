@@ -3,10 +3,13 @@
 # Enable strict error handling
 set -euo pipefail
 
-# Colors for output
+# Import logging functions
+REPO_DIR="$(git rev-parse --show-toplevel)"
+source "${REPO_DIR}/dev/logger.sh"
+
+# Colors for special output
 SUCCESS_COLOR="\033[32m"
 ERROR_COLOR="\033[31m"
-WARNING_COLOR="\033[33m"
 NO_COLOR="\033[0m"
 
 # Dependency Check Function
@@ -22,18 +25,18 @@ check_dependency() {
     if [ -n "$check_cmd" ]; then
         if ! $check_cmd >/dev/null 2>&1; then
             echo -e "${ERROR_COLOR}✘${NO_COLOR}"
-            echo -e "${ERROR_COLOR}Error: ${name} is not installed or configured.${NO_COLOR}"
+            error "${name} is not installed or configured."
             if [ -n "$install_url" ]; then
-                echo -e "${WARNING_COLOR}You can install ${name} from: ${install_url}${NO_COLOR}"
+                warn "You can install ${name} from: ${install_url}"
             fi
             exit 1
         fi
     else
         if ! command -v "$cmd" >/dev/null 2>&1; then
             echo -e "${ERROR_COLOR}✘${NO_COLOR}"
-            echo -e "${ERROR_COLOR}Error: ${name} is not installed or not in your PATH.${NO_COLOR}"
+            error "${name} is not installed or not in your PATH."
             if [ -n "$install_url" ]; then
-                echo -e "${WARNING_COLOR}You can install ${name} from: ${install_url}${NO_COLOR}"
+                warning "You can install ${name} from: ${install_url}"
             fi
             exit 1
         fi
@@ -42,7 +45,7 @@ check_dependency() {
 }
 
 # Check for required dependencies
-echo "Checking dependencies..."
+info "Checking dependencies..."
 
 # Dependency: Docker
 check_dependency \
@@ -57,10 +60,22 @@ check_dependency \
     "https://docs.docker.com/buildx/working-with-buildx/" \
     "docker buildx version"
 
+# Dependency: Skopeo
+check_dependency \
+    "skopeo" \
+    "Skopeo" \
+    "https://github.com/containers/skopeo/blob/main/install.md"
+
+# Dependency: Trivy
+check_dependency \
+    "trivy" \
+    "Trivy" \
+    "https://trivy.dev/dev/getting-started/#get-trivy"
+
 # Dependency: UV
 check_dependency \
     "uv" \
     "UV" \
     "https://github.com/astral-sh/uv"
 
-echo -e "${SUCCESS_COLOR}All dependencies are installed!${NO_COLOR}"
+success "All dependencies are installed!"

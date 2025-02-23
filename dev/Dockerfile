@@ -20,23 +20,23 @@ RUN apt-get update && \
 # Install `uv`
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
+# Copy project files
+COPY ./ $APP_HOME
+
 # Create application directory and set permissions
 RUN addgroup --system appgroup && \
-    adduser --system appuser --ingroup appgroup && \
+    adduser --system appuser --ingroup appgroup --home $APP_HOME && \
     mkdir -p $LOG_DIR && \
     chown -R appuser:appgroup $APP_HOME
 
 # Set working directory
 WORKDIR $APP_HOME
 
-# Copy project files
-COPY ./ $APP_HOME
+# Switch to non-root user
+USER appuser
 
 # Create the venv and install runtime dependencies
 RUN uv sync --frozen --no-cache --no-dev
 
-# Switch to non-root user
-USER appuser
-
 # Run the bot
-CMD ["uv", "run", "main.py"]
+CMD ["uv", "run", "--no-dev", "main.py"]

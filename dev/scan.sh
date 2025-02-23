@@ -1,29 +1,34 @@
 #!/usr/bin/env bash
 
+# Exit on error
 set -e
 
 # Default values
-TAG="latest"
-SCANNER="trivy" # Default scanner
+REPO_DIR="$(git rev-parse --show-toplevel)"
+SCANNER="trivy"  # Default scanner
+TAG="latest"  # Default tag
+
+# Import logging functions
+source "${REPO_DIR}/dev/logger.sh"
 
 # Parse arguments
 while [[ "$#" -gt 0 ]]; do
     case "$1" in
-    --tag)
-        TAG="$2"
-        shift 2
-        ;;
-    --scanner|-s)
-        SCANNER="$2"
-        shift 2
-        ;;
     --help|-h)
-        echo "Usage: $0 [--tag <image-tag>] [--scanner <scanner-name>]"
+        echo "Usage: $0 [--tag <image-tag>] [--tarball <file>] [--scanner <scanner-name>]"
         echo "Options:"
         echo "  --help,     -h             Display this help message and exit."
         echo "  --scanner,  -s <scanner>   Specify the vulnerability scanner (e.g., 'trivy', 'grype', 'snyk') (default: 'trivy')."
         echo "  --tag,      -t <tag>       Specify the Docker image tag to scan (default: 'latest')."
         exit 0
+        ;;
+    --scanner|-s)
+        SCANNER="$2"
+        shift 2
+        ;;
+    --tag)
+        TAG="$2"
+        shift 2
         ;;
     *)
         echo "Unknown option: $1"
@@ -33,67 +38,61 @@ while [[ "$#" -gt 0 ]]; do
     esac
 done
 
-# Validate image tag
-if [[ -z "$TAG" ]]; then
-    echo "Error: Image tag must be provided."
-    exit 1
-fi
-
 # Define the full image name
-IMAGE_TAG="ghcr.io/cyberops7/discord-bot:$TAG"
+IMAGE="ghcr.io/cyberops7/discord-bot:$TAG"
 
-echo "Selected scanner: $SCANNER"
-echo "Scanning image: $IMAGE_TAG"
+info "Selected scanner: ${SCANNER}"
+info "Targeted image: ${IMAGE}"
 
 # Functions to handle each scanner
 run_grype() {
     echo "Running scan with Grype..."
     if ! command -v grype &> /dev/null; then
-        echo "Grype not found. Installing..."
-        curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh
-        mv grype /usr/local/bin/
+        error "Grype not found."
+        warn "You can install Grype from: https://github.com/anchore/grype?tab=readme-ov-file#installation"
+        exit 1
     fi
-    grype "$IMAGE_TAG"
+
+    grype "$IMAGE"
+    success "Grype scan completed."
 }
 
 run_snyk() {
-    echo "Running scan with Snyk..."
+    info "Running scan with Snyk..."
     if ! command -v snyk &> /dev/null; then
-        echo "Snyk not found. Installing..."
-        npm install -g snyk
+        error "Snyk not found."
+        warn "You can install Snyk from: https://docs.snyk.io/snyk-cli/install-or-update-the-snyk-cli"
+        exit 1
     fi
     # Authenticate Snyk if required (requires access to `snyk auth`)
     if ! snyk auth --help &> /dev/null; then
         echo "Snyk requires authentication. Run 'snyk auth' locally to authenticate with Snyk."
         exit 1
     fi
-    snyk container test "$IMAGE_TAG"
+
+    snyk container test "$IMAGE"
+    success "Snyk scan completed."
 }
 
 run_trivy() {
-    echo "Running scan with Trivy..."
-    if ! command -v trivy &> /dev/null; then
-        echo "Trivy not found. Installing..."
-        wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_$(uname -s)_$(uname -m).tar.gz
-        tar zxvf trivy_$(uname -s)_$(uname -m).tar.gz
-        mv trivy /usr/local/bin/
-    fi
-    trivy image "$IMAGE_TAG"
+    info "Running scan with Trivy..."
+    trivy image "$IMAGE"
+    success "Trivy scan completed."
 }
 
 # Execute the appropriate scanner
 case "$SCANNER" in
-    trivy)
-        run_trivy
-        ;;
     grype)
         run_grype
         ;;
     snyk)
         run_snyk
         ;;
+    trivy)
+        run_trivy
+        ;;
     *)
-        echo "Error: Unsupported scanner '$SCANNER'. Supported scanners are: trivy, grype, snyk."
+        error "Unsupported scanner '$SCANNER'. Supported scanners are: grype, snyk, trivy (default)"
         exit 1
         ;;
 esac

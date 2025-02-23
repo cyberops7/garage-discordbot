@@ -1,12 +1,15 @@
 __pycache__/
 .git/
-../.github/
+.github/
+.idea/
 .mypy_cache/
 .ruff_cache/
 .tmp/
 .venv/
 dev/
 logs/
+.dockerignore
 .env
 .gitignore
+sample.env
 Makefile
