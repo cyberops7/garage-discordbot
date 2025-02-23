@@ -25,45 +25,45 @@ TAG="test-$(date +%Y%m%d)"  # Default image tag
 
 # Parse arguments
 while [[ "$#" -gt 0 ]]; do
-  case "$1" in
-    --cache)
-      CACHE_FLAG="" # If --cache flag is present, remove --no-cache
-      shift
-      ;;
-    --help|-h)
-      echo "Usage: $0 [--tag <tag>] [--push] [--cache]"
-      echo "Options:"
-      echo "  --help,  -h           Show this help message and exit."
-      echo "  --cache               Enable Docker caching (default is no cache)."
-      echo "  --local               Export the built image from the buildx builder to the local Docker daemon."
-      echo "  --push                Enable pushing the image to the registry."
-      echo "  --tag,   -t <tag>     Specify the image tag (default: 'test-YYYYMMDD')."
-      exit 0
-      ;;
-    --local)
-        LOCAL_FLAG="--output type=oci,dest=.tmp/oci-image.tar"
-        shift
-        ;;
-    --push)
-      PUSH_FLAG="--push"
-      shift
-      ;;
-    --tag|-t)
-      # Check if the next argument exists and isn't empty or another flag
-      if [[ -z "$2" || "$2" == -* ]]; then
-        echo "Error: '--tag' option requires a value."
-        echo "Run '$0 --help' for usage information."
-        exit 1
-      fi
-      TAG="$2"
-      shift 2
-      ;;
-    *)
-      echo "Unknown option: $1"
-      echo "Run '$0 --help' for usage information."
-      exit 1
-      ;;
-  esac
+    case "$1" in
+        --cache)
+            CACHE_FLAG="" # If --cache flag is present, remove --no-cache
+            shift
+            ;;
+        --help|-h)
+            echo "Usage: $0 [--tag <tag>] [--push] [--cache]"
+            echo "Options:"
+            echo "  --help,  -h           Show this help message and exit."
+            echo "  --cache               Enable Docker caching (default is no cache)."
+            echo "  --local               Export the built image from the buildx builder to the local Docker daemon."
+            echo "  --push                Enable pushing the image to the registry."
+            echo "  --tag,   -t <tag>     Specify the image tag (default: 'test-YYYYMMDD')."
+            exit 0
+            ;;
+        --local)
+            LOCAL_FLAG="--output type=oci,dest=.tmp/oci-image.tar"
+            shift
+            ;;
+        --push)
+            PUSH_FLAG="--push"
+            shift
+            ;;
+        --tag|-t)
+            # Check if the next argument exists and isn't empty or another flag
+            if [[ -z "$2" || "$2" == -* ]]; then
+                echo "Error: '--tag' option requires a value."
+                echo "Run '$0 --help' for usage information."
+            exit 1
+            fi
+            TAG="$2"
+            shift 2
+            ;;
+        *)
+            error "Unknown option: $1"
+            warning "Run '$0 --help' for usage information."
+            exit 1
+            ;;
+    esac
 done
 
 info "Using tag: ${TAG}"

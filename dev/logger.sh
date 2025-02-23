@@ -31,3 +31,19 @@ error() {
 note() {
     echo -e "${CYAN}[NOTE]${RESET} $1"
 }
+
+# Print a line of a character repeated N times
+divider() {
+    local char="${1:-*}"  # Default to "#" if no character is provided
+    local num="${2:-100}" # Default to 100 if no number is provided
+
+    # Validate inputs
+    if [[ "$num" -le 0 ]]; then
+        error "Invalid input. The number must be positive."
+        return 1
+    fi
+
+    # Print the separator
+    echo -e "${CYAN}$(printf "%0.s${char}" $(seq 1 "$num"))${RESET}"
+}
+

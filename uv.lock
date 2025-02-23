@@ -203,10 +203,10 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "isort" },
     { name = "mypy" },
     { name = "pylint" },
     { name = "pyre" },
+    { name = "pyright" },
     { name = "ruff" },
 ]
 
@@ -218,10 +218,10 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "isort", specifier = ">=6.0.0" },
     { name = "mypy", specifier = ">=1.15.0" },
     { name = "pylint", specifier = ">=3.3.4" },
     { name = "pyre", specifier = ">=1.12.5" },
+    { name = "pyright", specifier = ">=1.1.394" },
     { name = "ruff", specifier = ">=0.9.7" },
 ]
 
@@ -305,6 +305,15 @@ wheels = [
 ]
 
 [[package]]
+name = "nodeenv"
+version = "1.9.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/43/16/fc88b08840de0e0a72a2f9d8c6bae36be573e475a6326ae854bcc549fc45/nodeenv-1.9.1.tar.gz", hash = "sha256:6ec12890a2dab7946721edbfbcd91f3319c6ccc9aec47be7c7e6b7011ee6645f", size = 47437 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d2/1d/1b658dbd2b9fa9c4c9f32accbfc0205d532c8c6194dc0f2a4c0428e7128a/nodeenv-1.9.1-py2.py3-none-any.whl", hash = "sha256:ba11c9782d29c27c70ffbdda2d7415098754709be8a7056d79a737cd901155c9", size = 22314 },
+]
+
+[[package]]
 name = "platformdirs"
 version = "4.3.6"
 source = { registry = "https://pypi.org/simple" }
@@ -380,6 +389,19 @@ dependencies = [
     { name = "pyyaml" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/4e/ec/410c6afd6756cade8be132ae032cf286aae0ec478c80773b4490f5f08c42/pyre-1.12.5.tar.gz", hash = "sha256:9be1e0b75e0fe5a8259b4a0a7d445745c3f3a0dd93bef4f99687e000e92293d6", size = 2791592 }
+
+[[package]]
+name = "pyright"
+version = "1.1.394"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "nodeenv" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/b1/e4/79f4d8a342eed6790fdebdb500e95062f319ee3d7d75ae27304ff995ae8c/pyright-1.1.394.tar.gz", hash = "sha256:56f2a3ab88c5214a451eb71d8f2792b7700434f841ea219119ade7f42ca93608", size = 3809348 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d6/4c/50c74e3d589517a9712a61a26143b587dba6285434a17aebf2ce6b82d2c3/pyright-1.1.394-py3-none-any.whl", hash = "sha256:5f74cce0a795a295fb768759bbeeec62561215dea657edcaab48a932b031ddbb", size = 5679540 },
+]
 
 [[package]]
 name = "python-dotenv"

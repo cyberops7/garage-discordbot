@@ -32,6 +32,10 @@ deps: ## Verify dependencies (e.g. Docker, buildx, uv)
 		bash $(SCRIPTS_DIR)/deps.sh > /dev/null; \
 	fi
 
+.PHONY: fix
+fix: ## Run linters and other code quality checks in fix mode
+	@bash $(SCRIPTS_DIR)/check.sh --fix
+
 .PHONY: publish
 publish: deps clean ## Build and push the Docker image with TAG
 	@bash $(SCRIPTS_DIR)/build.sh --tag $(TAG) --push
