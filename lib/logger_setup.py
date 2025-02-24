@@ -5,6 +5,7 @@ import os
 import sys
 from logging import Formatter, Logger, StreamHandler
 from logging.handlers import RotatingFileHandler
+from typing import TextIO
 
 
 def configure_logger() -> None:
@@ -55,12 +56,12 @@ def create_formatter() -> Formatter:
     )
 
 
-def create_stdout_handler(formatter: Formatter) -> StreamHandler:
+def create_stdout_handler(formatter: Formatter) -> StreamHandler[TextIO]:
     """Create a stdout (stream) handler with a provided formatter"""
     log_level_stdout_str: str = os.getenv("LOG_LEVEL_STDOUT", "INFO")
     log_level_stdout: int = getattr(logging, log_level_stdout_str)
 
-    stdout_handler: StreamHandler = StreamHandler(sys.stdout)
+    stdout_handler: StreamHandler[TextIO] = StreamHandler(sys.stdout)
     stdout_handler.setLevel(log_level_stdout)
     stdout_handler.setFormatter(formatter)
     return stdout_handler

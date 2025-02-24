@@ -11,9 +11,32 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "mypy>=1.15.0",
-    "pylint>=3.3.4",
-    "pyre>=1.12.5",
+    "pyre-check>=0.9.23",
     "pyright>=1.1.394",
     "ruff>=0.9.7",
 ]
+
+[tool.ruff]
+indent-width = 4
+line-length = 88
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "COM812",
+    "D"
+]
+# D - docustring checking
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+indent-style = "space"
+quote-style = "double"
+

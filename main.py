@@ -31,8 +31,7 @@ def main() -> None:
 
     # Initialize the bot
     logger.info("Initializing bot...")
-    intents: Intents = discord.Intents.default()
-    intents.message_content = True  # NOQA
+    intents: Intents = discord.Intents.all()
     bot: DiscordBot = DiscordBot(intents=intents)
 
     # Run the bot

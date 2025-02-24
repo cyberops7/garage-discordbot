@@ -14,7 +14,7 @@ class DiscordBot(discord.Client):
         """Called when the bot is ready"""
         logger.info("We have logged in as %s", self.user)
 
-    async def on_message(self, message) -> None:
+    async def on_message(self, message: discord.Message) -> None:
         """Called when a message is received"""
         # Ignore messages from the bot itself
         if message.author == self.user:

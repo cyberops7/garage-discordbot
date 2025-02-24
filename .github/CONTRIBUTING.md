@@ -24,7 +24,7 @@
   * Put your bot token in the new .env file (this file is ignored by Git),
   or provide it to the shell environment, Docker container, etc. in some other way)
 * Install development tools
-  * Run `make deps` to check for non-python requiremed packaged
+  * Run `make deps` to check for non-python required packages
   * If you do not have `make` installed, you'll need to follow instructions for your OS
     * macOS
       * `brew install make`
@@ -61,5 +61,31 @@ with updated dependencies.
     ```
 
 ### `make` targets
+TODO
+
+### Pyre Notes
+If you make updates to `.pyre_configuration`, 
+you need to run the following in order to pick up the new configuration.:
+```shell
+pyre restart
+```
+
+* Run a full scan:
+  ```shell
+  pyre check
+  ```
+
+* Run an incremental scan
+  ```shell
+  pyre
+  ```
+  * Running `pyre` starts up a pyre server (if `watchman` is also installed on the host),
+and does an incremental check.
+
+  * See the list of running servers:
+    ```shell
+    pyre servers
+    ```
+
 
 

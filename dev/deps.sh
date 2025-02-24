@@ -78,4 +78,10 @@ check_dependency \
     "UV" \
     "https://github.com/astral-sh/uv"
 
+# Dependency: Watchman
+check_dependency \
+    "watchman" \
+    "Watchman" \
+    "https://facebook.github.io/watchman/docs/install"
+
 success "All dependencies are installed!"

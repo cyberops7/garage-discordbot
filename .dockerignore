@@ -3,6 +3,7 @@ __pycache__/
 .github/
 .idea/
 .mypy_cache/
+.pyre/
 .ruff_cache/
 .tmp/
 .venv/

@@ -31,18 +31,7 @@ while [[ "$#" -gt 0 ]]; do
     esac
 done
 
-divider
-if $FIX_MODE; then
-    info "Checking imports with ruff (fix mode)..."
-    if ! uvx ruff check --fix --select I "$REPO_DIR"; then
-        error "isort (fix mode) failed!"
-    fi
-else
-    info "Checking imports with isort (check mode)..."
-    if ! uvx ruff check --select I "$REPO_DIR"; then
-        error "isort (check mode) detected issues!"
-    fi
-fi
+source .venv/bin/activate
 
 divider
 if $FIX_MODE; then
@@ -68,6 +57,18 @@ else
     if ! uvx ruff check "$REPO_DIR"; then
         error "ruff check (check mode) detected issues!"
     fi
+fi
+
+divider
+info "Type checking with pyre check..."
+if ! pyre check; then
+    error "pyre check detected issues!"
+fi
+
+divider
+info "Type checking with pyright..."
+if ! pyright; then
+    error "pyright detected issues!"
 fi
 
 divider
