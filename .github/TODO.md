@@ -25,20 +25,20 @@
 
 
 - Makefile / Core Functions
-  - [ ] `make check`
+  - `make check`
     - [x] Run linters and checkers 
     - [x] `make fix` as a fix-enabled version of `make check`
     - [ ] Compare/test between Pyre and Pyright
-  - [x] `make clean`
+  - `make clean`
     - [x] Clean up old Docker containers and buildx builders
     - [x] Run as a prerequisite for `make run`, `make build`
-  - [x] `make deps`
+  - `make deps`
     - Check that dev dependencies are installed
-  - [x] `make publish`
+  - `make publish`
     - [x] Make it a variant `build`, just with an extra flag to push the image
-  - [x] `make run`
+  - `make run`
     - Run the bot container locally
-  - [ ] `make scan`
+  - `make scan`
     - [ ] Get other scanners working
 
 
