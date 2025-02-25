@@ -32,7 +32,7 @@ def create_logger() -> Logger:
 
 def create_file_handler(formatter: Formatter) -> RotatingFileHandler:
     """Create a file handler with a provided formatter"""
-    log_dir: str = os.getenv("LOG_DIR", "logs")
+    log_dir: str = os.getenv("LOG_DIR", "log")
     log_level_file_str: str = os.getenv("LOG_LEVEL_FILE", "INFO")
     log_level_file: int = getattr(logging, log_level_file_str)
 

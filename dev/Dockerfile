@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.source=https://github.com/cyberops7/garage-discor
 
 # Set up default env vars
 ENV APP_HOME=/app \
-    LOG_DIR=/app/logs \
+    LOG_DIR=/app/log \
     LOG_LEVEL_FILE=INFO \
     LOG_LEVEL_STDOUT=INFO \
     PATH="/root/.local/bin:$PATH" \

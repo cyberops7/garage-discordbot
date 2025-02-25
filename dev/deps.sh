@@ -12,6 +12,8 @@ SUCCESS_COLOR="\033[32m"
 ERROR_COLOR="\033[31m"
 NO_COLOR="\033[0m"
 
+MISSING_DEPS=False
+
 # Dependency Check Function
 check_dependency() {
     local cmd="$1"
@@ -27,21 +29,24 @@ check_dependency() {
             echo -e "${ERROR_COLOR}✘${NO_COLOR}"
             error "${name} is not installed or configured."
             if [ -n "$install_url" ]; then
-                warn "You can install ${name} from: ${install_url}"
+                note "You can install ${name} from: ${install_url}"
             fi
-            exit 1
+            MISSING_DEPS=True
+        else
+            echo -e "${SUCCESS_COLOR}✔${NO_COLOR}"
         fi
     else
         if ! command -v "$cmd" >/dev/null 2>&1; then
             echo -e "${ERROR_COLOR}✘${NO_COLOR}"
             error "${name} is not installed or not in your PATH."
             if [ -n "$install_url" ]; then
-                warning "You can install ${name} from: ${install_url}"
+                note "You can install ${name} from: ${install_url}"
             fi
-            exit 1
+            MISSING_DEPS=True
+        else
+            echo -e "${SUCCESS_COLOR}✔${NO_COLOR}"
         fi
     fi
-    echo -e "${SUCCESS_COLOR}✔${NO_COLOR}"
 }
 
 # Check for required dependencies
@@ -76,7 +81,7 @@ check_dependency \
 check_dependency \
     "uv" \
     "UV" \
-    "https://github.com/astral-sh/uv"
+    "https://docs.astral.sh/uv/getting-started/installation/"
 
 # Dependency: Watchman
 check_dependency \
@@ -84,4 +89,8 @@ check_dependency \
     "Watchman" \
     "https://facebook.github.io/watchman/docs/install"
 
-success "All dependencies are installed!"
+if ! "${MISSING_DEPS}"; then
+    success "All dependencies are installed!"
+else
+    error "Your environment is missing some dependencies."
+fi

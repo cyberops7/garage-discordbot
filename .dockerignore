@@ -2,13 +2,12 @@ __pycache__/
 .git/
 .github/
 .idea/
-.mypy_cache/
 .pyre/
 .ruff_cache/
 .tmp/
 .venv/
 dev/
-logs/
+log/
 .dockerignore
 .env
 .gitignore

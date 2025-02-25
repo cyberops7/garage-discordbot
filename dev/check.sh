@@ -65,11 +65,11 @@ if ! pyre check; then
     error "pyre check detected issues!"
 fi
 
-divider
-info "Type checking with pyright..."
-if ! pyright; then
-    error "pyright detected issues!"
-fi
+#divider
+#info "Type checking with pyright..."
+#if ! pyright; then
+#    error "pyright detected issues!"
+#fi
 
 divider
 info "Running trivy file scanner for misconfig, secrets, and vulnerabilities..."

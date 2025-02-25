@@ -16,6 +16,14 @@ dev = [
     "ruff>=0.9.7",
 ]
 
+# Note - this is not yet consumed by Pyre.  A recent commit enables it, but there has not been a fresh build of Pyre yet:
+# See https://github.com/facebook/pyre-check/issues/695
+[tool.pyre]
+ignore_all_errors = [".venv"]
+site_package_search_strategy="pep561"
+source_directories = ["."]
+strict = true
+
 [tool.ruff]
 indent-width = 4
 line-length = 88
