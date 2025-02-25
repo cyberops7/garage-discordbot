@@ -1,5 +1,6 @@
 __pycache__
 .idea
+.pre-commit-trivy-cache
 .ruff_cache
 .pyre
 .venv

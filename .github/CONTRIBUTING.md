@@ -3,7 +3,7 @@
 ### Dev Scripts
 The `scripts/` directory has a number of bash scripts to streamline common development tasks.
 For ease of use, these scripts are mapped to various `make` targets 
-( see [Install Development Tools](#install-development-tools) for installing `make`).
+(see [Install Development Tools](#install-development-tools) for installing `make`).
 
 `make help` (or, simply `make`) will give you the most up-to-date state of available targets, but this is a snapshot (which may or may not be up-to-date):
 ```text
@@ -19,6 +19,9 @@ Available commands:
   scan            Scan the Docker image:TAG for vulnerabilities
 ```
 
+Use these commands to run linting checks, build test tags of the 
+Docker image, publish a test build to GitHub container registry, etc.
+
 You can pass supported arguments to the targets like this:
 ```shell
 make build TAG=new-feature-test
@@ -33,6 +36,18 @@ Checks by these tools are built into the `make check` command, which will report
 
 To have eligible problems automatically fixed, you can use `make fix` instead, 
 which runs the same checks but with different flags to enable remediation.
+
+#### Pre-Commit Hooks
+`pre-commit` facilitates running many of the same tests that will 
+need to pass for PRs to be accepted, but running them before allowing 
+a `git commit` to go through. Enabling this will streamline the PR 
+process.
+
+To manually run the checks against all files (not just changed files), 
+you can run:
+```shell
+pre-commit run --all-files
+```
 
 #### Ruff Notes
 Ruff performs both code formatting and code linting.
@@ -143,7 +158,15 @@ The repo has a sample .env file that enumerates the environment variables that y
 Make a copy of it as `.env` for your own development environment.
 ```shell
 cp sample.env .env
- ```
+```
 This new file (`.env`) is ignored by git, so you can put your bot token in there 
 without worrying about it being committed.  Otherwise, you'll need to provide 
 your own token to the shell environment, Docker container, etc. in some other way.
+
+### Install Pre-Commit Hooks
+The `pre-commit` Python module was installed as a dev dependency.
+See [Pre-Commit Hooks](#pre-commit-hooks) for more information.
+To enable it, run:
+```shell
+pre-commit install
+```

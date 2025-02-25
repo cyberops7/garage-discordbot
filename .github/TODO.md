@@ -11,6 +11,7 @@
 ---
 - Documentation
   - CONTRIBUTING
+    - [ ] Pre-commit hooks
     - [ ] Using the DiscordBot class
     - [ ] Add new modules into `lib/`
     - Testing
@@ -22,8 +23,7 @@
     - [ ] While tailored to Jim's Garage and my own dev environment, feel free to fork, etc.
     - [ ] How to run your own instance of the bot - docker, kubernetes
   
-
-
+  
 - Makefile / Core Functions
   - `make check`
     - [x] Run linters and checkers 
@@ -40,6 +40,7 @@
     - Run the bot container locally
   - `make scan`
     - [ ] Get other scanners working
+  - [ ] Add ARG information to target help comments
 
 
 - GitHub Actions
@@ -51,7 +52,17 @@
     - [ ] Build and publish image to ghcr
 
 
+- Pre-commit Hooks
+  - [x] Ruff (check + format)
+  - [ ] Pyre
+    - There are some recent fixes to the pre-commit-hooks, 
+      but there has not been a release yet that includes them
+  - [x] Trivy fs
+  - [x] uv lock
+
+
 - Logging
+  - [ ] Logger config read from yaml/JSON file
   - [ ] JSON log formatting
   - [ ] Log to a queue handler to make logging non-blocking
   - [x] Bash logging library
@@ -61,6 +72,7 @@
 
 
 - Docker
+  - [ ] Write a healthcheck script (from discord.ext import tasks)
   - [ ] Investigate moving to python:3.13-alpine base image
   - [x] Move to a `docker/` directory
   - [ ] A docker compose file
@@ -69,3 +81,8 @@
 - Kubernetes
   - [ ] Create `kubernetes/` directory with manifests
   - [ ] Pull those into or from internal k3s repo (TBD)
+  - [ ] Trivy config scanning: https://trivy.dev/v0.57/docs/scanner/misconfiguration/
+
+
+- Unit Testing
+  - [ ] Figure out what testing makes sense

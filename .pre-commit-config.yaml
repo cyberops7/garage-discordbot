@@ -1,0 +1,32 @@
+---
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # ruff version
+    rev: v0.9.7
+    hooks:
+      # Run the linter (default is check only, not fix).
+      - id: ruff
+      # Run the formatter.
+      - id: ruff-format
+
+# Disabled for now - this appears to be broken. Some fixes are pending the next release
+#  - repo: https://github.com/facebook/pyre-check
+#    rev: v0.9.23
+#    hooks:
+#      - id: pyre-check
+
+  - repo: https://github.com/mxab/pre-commit-trivy.git
+    rev: v0.14.0
+    hooks:
+      - id: trivyfs-docker
+        args:
+          - --scanners
+          - misconfig,secret,vuln
+          - . # last arg indicates the path/file to scan
+
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    # uv version.
+    rev: 0.6.2
+    hooks:
+      # Make sure that uv's lock file matches deps in pyproject.toml
+      - id: uv-lock

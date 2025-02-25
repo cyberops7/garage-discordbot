@@ -40,3 +40,6 @@ RUN uv sync --frozen --no-cache --no-dev
 
 # Run the bot
 CMD ["uv", "run", "--no-dev", "main.py"]
+
+# Placeholder healthcheck until a real one is ready
+HEALTHCHECK CMD echo "Placeholder health check" || exit 0

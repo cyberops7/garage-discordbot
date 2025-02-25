@@ -2,6 +2,7 @@ __pycache__/
 .git/
 .github/
 .idea/
+.pre-commit-trivy-cache/
 .pyre/
 .ruff_cache/
 .tmp/
