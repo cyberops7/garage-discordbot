@@ -5,7 +5,7 @@ set -e
 
 # Get repo directory
 REPO_DIR="$(git rev-parse --show-toplevel)"
-SCRIPT_DIR="${REPO_DIR}/dev"
+SCRIPT_DIR="${REPO_DIR}/scripts"
 
 # Import logging functions
 source "${SCRIPT_DIR}/logger.sh"
@@ -14,7 +14,7 @@ info "Repo directory: ${REPO_DIR}"
 
 # Define context and Dockerfile relative to the script location
 CONTEXT="${REPO_DIR}"
-DOCKERFILE="${SCRIPT_DIR}/Dockerfile"
+DOCKERFILE="${REPO_DIR}/docker/Dockerfile"
 IMAGE_NAME=ghcr.io/cyberops7/discord-bot
 
 # Default values

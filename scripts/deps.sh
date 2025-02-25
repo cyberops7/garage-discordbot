@@ -5,7 +5,7 @@ set -euo pipefail
 
 # Import logging functions
 REPO_DIR="$(git rev-parse --show-toplevel)"
-source "${REPO_DIR}/dev/logger.sh"
+source "${REPO_DIR}/scripts/logger.sh"
 
 # Colors for special output
 SUCCESS_COLOR="\033[32m"

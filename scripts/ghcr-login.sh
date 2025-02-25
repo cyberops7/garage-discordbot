@@ -5,7 +5,7 @@ set -e
 
 # Import logging functions
 REPO_DIR="$(git rev-parse --show-toplevel)"
-source "${REPO_DIR}/dev/logger.sh"
+source "${REPO_DIR}/scripts/logger.sh"
 
 info "Signing in to 1Password..."
 eval "$(op signin)"

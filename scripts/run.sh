@@ -5,7 +5,7 @@ set -e
 
 # Import logging functions
 REPO_DIR="$(git rev-parse --show-toplevel)"
-source "${REPO_DIR}/dev/logger.sh"
+source "${REPO_DIR}/scripts/logger.sh"
 
 # Default tag value
 CONTAINER_NAME=bot-test

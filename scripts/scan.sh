@@ -9,7 +9,7 @@ SCANNER="trivy"  # Default scanner
 TAG="latest"  # Default tag
 
 # Import logging functions
-source "${REPO_DIR}/dev/logger.sh"
+source "${REPO_DIR}/scripts/logger.sh"
 
 # Parse arguments
 while [[ "$#" -gt 0 ]]; do

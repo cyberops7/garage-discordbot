@@ -62,7 +62,7 @@
 
 - Docker
   - [ ] Investigate moving to python:3.13-alpine base image
-  - [ ] Move to a `docker/` directory
+  - [x] Move to a `docker/` directory
   - [ ] A docker compose file
 
 

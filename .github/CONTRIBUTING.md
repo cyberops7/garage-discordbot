@@ -1,7 +1,7 @@
 ## Contributing Guidelines
 
 ### Dev Scripts
-The `dev/` directory has a number of bash scripts to streamline common development tasks.
+The `scripts/` directory has a number of bash scripts to streamline common development tasks.
 For ease of use, these scripts are mapped to various `make` targets 
 ( see [Install Development Tools](#install-development-tools) for installing `make`).
 

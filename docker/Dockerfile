@@ -21,7 +21,7 @@ RUN apt-get update && \
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Copy project files
-COPY ./ $APP_HOME
+COPY ../scripts $APP_HOME
 
 # Create application directory and set permissions
 RUN addgroup --system appgroup && \
