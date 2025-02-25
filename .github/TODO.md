@@ -10,9 +10,17 @@
 
 ---
 - Documentation
-  - [ ] CONTRIBUTING
-    - [ ] 
-  - [ ] README
+  - CONTRIBUTING
+    - [ ] Using the DiscordBot class
+    - [ ] Add new modules into `lib/`
+    - Testing
+      - [ ] How to run locally
+  - README
+    - [ ] Bot features
+    - [ ] Brief architecture overview
+    - [ ] Link to discord.py documentation
+    - [ ] While tailored to Jim's Garage and my own dev environment, feel free to fork, etc.
+    - [ ] How to run your own instance of the bot - docker, kubernetes
   
 
 
@@ -35,11 +43,11 @@
 
 
 - GitHub Actions
-  - [ ] PRs
+  - Submitted PRs
     - [ ] Lint/check code
     - [ ] Build image
     - [ ] Scan image
-  - [ ] Accepted PRs
+  - Accepted PRs
     - [ ] Build and publish image to ghcr
 
 
@@ -54,8 +62,10 @@
 
 - Docker
   - [ ] Investigate moving to python:3.13-alpine base image
+  - [ ] Move to a `docker/` directory
+  - [ ] A docker compose file
 
 
 - Kubernetes
-  - [ ] Create kubernetes directory with manifests
-  - [ ] Pull those into or from internal k3s repo
+  - [ ] Create `kubernetes/` directory with manifests
+  - [ ] Pull those into or from internal k3s repo (TBD)
