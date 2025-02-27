@@ -60,6 +60,7 @@
       but there has not been a release yet that includes them
   - [x] Trivy fs
   - [x] uv lock
+  - [x] yamllint
 
 
 - Logging
@@ -76,7 +77,7 @@
   - [ ] Write a healthcheck script (from discord.ext import tasks)
   - [ ] Investigate moving to python:3.13-alpine base image
   - [x] Move to a `docker/` directory
-  - [ ] A docker compose file
+  - [x] A docker compose file
 
 
 - Kubernetes
