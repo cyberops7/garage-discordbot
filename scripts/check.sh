@@ -72,6 +72,15 @@ fi
 #fi
 
 divider
+info "Linting bash files with shellcheck..."
+if ! shellcheck -x "${REPO_DIR}/scripts/*.sh"; then
+    error "yamllint detected issues!"
+else
+    success yamllint passed
+fi
+
+
+divider
 info "Running trivy file scanner for misconfig, secrets, and vulnerabilities..."
 TRIVY_CMD="trivy fs --scanners misconfig,secret,vuln ${REPO_DIR}"
 if ! eval "$TRIVY_CMD"; then

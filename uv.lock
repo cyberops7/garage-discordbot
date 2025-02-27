@@ -242,6 +242,7 @@ dev = [
     { name = "pyre-check" },
     { name = "pyright" },
     { name = "ruff" },
+    { name = "shellcheck-py" },
     { name = "yamllint" },
 ]
 
@@ -257,6 +258,7 @@ dev = [
     { name = "pyre-check", specifier = ">=0.9.23" },
     { name = "pyright", specifier = ">=1.1.394" },
     { name = "ruff", specifier = ">=0.9.7" },
+    { name = "shellcheck-py", specifier = ">=0.10.0.1" },
     { name = "yamllint", specifier = ">=1.35.1" },
 ]
 
@@ -566,6 +568,18 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/49/79/acbc1edd03ac0e2a04ae2593555dbc9990b34090a9729a0c4c0cf20fb595/ruff-0.9.7-py3-none-win32.whl", hash = "sha256:e9ece95b7de5923cbf38893f066ed2872be2f2f477ba94f826c8defdd6ec6b7d", size = 9988751 },
     { url = "https://files.pythonhosted.org/packages/6d/95/67153a838c6b6ba7a2401241fd8a00cd8c627a8e4a0491b8d853dedeffe0/ruff-0.9.7-py3-none-win_amd64.whl", hash = "sha256:3770fe52b9d691a15f0b87ada29c45324b2ace8f01200fb0c14845e499eb0c2c", size = 11002987 },
     { url = "https://files.pythonhosted.org/packages/63/6a/aca01554949f3a401991dc32fe22837baeaccb8a0d868256cbb26a029778/ruff-0.9.7-py3-none-win_arm64.whl", hash = "sha256:b075a700b2533feb7a01130ff656a4ec0d5f340bb540ad98759b8401c32c2037", size = 10177763 },
+]
+
+[[package]]
+name = "shellcheck-py"
+version = "0.10.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/4b/ad/b96c0bc2e740797770307065464780eaeb1ab3eaa2bc4fbddaa8cfbba2ea/shellcheck_py-0.10.0.1.tar.gz", hash = "sha256:390826b340b8c19173922b0da5ef7b66ef34d4d087dc48aad3e01f7e77e164d9", size = 3071 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/98/74/b72e25338a8813da9845ffe0213c597bed0317078ebb096c72d3f8347972/shellcheck_py-0.10.0.1-py2.py3-none-macosx_11_0_x86_64.whl", hash = "sha256:48f08965cafbb3363b265c4ef40628ffced19cb6fc7c4bb5ce72d32cbcfb4bb9", size = 6751219 },
+    { url = "https://files.pythonhosted.org/packages/c1/e8/95f0a2431e1c557af017648cd83ac52de81a16fa1cbe412b12e7dda51688/shellcheck_py-0.10.0.1-py2.py3-none-macosx_14_0_arm64.whl", hash = "sha256:8f3bf12ee6d0845dd5ac1a7bac8c4b1fec0379e115950986883c9488af40ada7", size = 11316565 },
+    { url = "https://files.pythonhosted.org/packages/cb/5c/ca7c7440dc25591961a8c6544468d3c987e2a84cb832a0f8b10e699e43b6/shellcheck_py-0.10.0.1-py2.py3-none-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c1c266f7f54cd286057c592ead3095f93d123acdcabf048879a7d8900c3aac7b", size = 3647494 },
+    { url = "https://files.pythonhosted.org/packages/4d/f7/5a1fff2c73bb2d044e3e9556961c4bb42525298782a199c8af232bf5ea8a/shellcheck_py-0.10.0.1-py2.py3-none-win_amd64.whl", hash = "sha256:be73a16931c05f79643ff74b6519d1e1203b394583ab8c68a48a8e7f257d1090", size = 1611786 },
 ]
 
 [[package]]

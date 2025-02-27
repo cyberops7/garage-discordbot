@@ -8,6 +8,7 @@ REPO_DIR="$(git rev-parse --show-toplevel)"
 SCRIPT_DIR="${REPO_DIR}/scripts"
 
 # Import logging functions
+# shellcheck disable=SC1091
 source "${SCRIPT_DIR}/logger.sh"
 
 info "Repo directory: ${REPO_DIR}"

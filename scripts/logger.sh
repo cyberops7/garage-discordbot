@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # logger.sh: A simple library for logging
 
 # Define text colors

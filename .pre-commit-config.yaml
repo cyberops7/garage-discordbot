@@ -16,6 +16,21 @@ repos:
   #    hooks:
   #      - id: pyre-check
 
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.10.0.1
+    hooks:
+      - id: shellcheck
+        args:
+          - -x
+        files: ^scripts/.*\.sh$
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        args:
+          - --strict
+
   - repo: https://github.com/mxab/pre-commit-trivy.git
     rev: v0.14.0
     hooks:
@@ -24,12 +39,6 @@ repos:
           - --scanners
           - misconfig,secret,vuln
           - .  # last arg indicates the path/file to scan
-
-  - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.35.1
-    hooks:
-      - id: yamllint
-        args: [--strict]
 
   - repo: https://github.com/astral-sh/uv-pre-commit
     # uv version.

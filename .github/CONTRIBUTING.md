@@ -28,9 +28,17 @@ make build TAG=new-feature-test
 ```
 
 ### Code Quality
-This project leverages `ruff` and `pyre` for enforcing code formatting, linting, and typing. 
-Trivy is also used for vulnerability scanning.  Clean scans from all of these tools will be 
-required for accepting Pull Requests.
+This project leverages the following tools:
+
+| Tool         | Use                              |
+|--------------|----------------------------------|
+| ruff         | Python formatting and linting    |
+| pyre         | Enforcing Python typing          |
+| shellcheck   | Bash linting                     |
+| trivy        | Vulnerability scanning           |
+| yamllint     | Yaml linting                     |
+
+Clean scans from all of these tools will be required for accepting Pull Requests.
 
 Checks by these tools are built into the `make check` command, which will report problems they detect.
 
@@ -47,6 +55,10 @@ To manually run the checks against all files (not just changed files),
 you can run:
 ```shell
 pre-commit run --all-files
+```
+To run a single check (e.g. ruff) against all files (not just changed files):
+```shell
+ pre-commit run --all-files shellcheck
 ```
 
 #### Ruff Notes

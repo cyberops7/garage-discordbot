@@ -14,6 +14,7 @@
     - [ ] Pre-commit hooks
     - [ ] Using the DiscordBot class
     - [ ] Add new modules into `lib/`
+    - [ ] Add hyperlinks to tools table
     - Testing
       - [ ] How to run locally
   - README
@@ -29,6 +30,8 @@
     - [x] Run linters and checkers 
     - [x] `make fix` as a fix-enabled version of `make check`
     - [x] Add yaml linting (yamllint)
+    - [x] Add shellcheck
+    - [ ] Change `make check` to call pre-commit commands?  Could be a good way to prevent drift...
     - [ ] Compare/test between Pyre and Pyright
   - `make clean`
     - [x] Clean up old Docker containers and buildx builders
@@ -61,6 +64,8 @@
   - [x] Trivy fs
   - [x] uv lock
   - [x] yamllint
+  - [x] shellcheck
+  - [ ] look for other good python pre-commit checks
 
 
 - Logging
