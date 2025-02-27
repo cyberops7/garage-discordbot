@@ -77,3 +77,9 @@ TRIVY_CMD="trivy fs --scanners misconfig,secret,vuln ${REPO_DIR}"
 if ! eval "$TRIVY_CMD"; then
     error "trivy scan failed!"
 fi
+
+divider
+info "Linting yaml files with yamllint..."
+if ! yamllint "$REPO_DIR"; then
+    error "pyre check detected issues!"
+fi

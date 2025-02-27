@@ -1,0 +1,11 @@
+---
+# https://yamllint.readthedocs.io/en/stable/configuration.html#default-configuration
+extends: default
+
+ignore-from-file:
+  - .gitignore
+
+rules:
+  indentation:
+    spaces: 2
+    indent-sequences: true

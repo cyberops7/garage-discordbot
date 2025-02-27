@@ -28,6 +28,7 @@
   - `make check`
     - [x] Run linters and checkers 
     - [x] `make fix` as a fix-enabled version of `make check`
+    - [x] Add yaml linting (yamllint)
     - [ ] Compare/test between Pyre and Pyright
   - `make clean`
     - [x] Clean up old Docker containers and buildx builders

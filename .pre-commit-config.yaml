@@ -9,11 +9,12 @@ repos:
       # Run the formatter.
       - id: ruff-format
 
-# Disabled for now - this appears to be broken. Some fixes are pending the next release
-#  - repo: https://github.com/facebook/pyre-check
-#    rev: v0.9.23
-#    hooks:
-#      - id: pyre-check
+  # Disabled for now - this appears to be broken.
+  # Some fixes are pending the next release.
+  #  - repo: https://github.com/facebook/pyre-check
+  #    rev: v0.9.23
+  #    hooks:
+  #      - id: pyre-check
 
   - repo: https://github.com/mxab/pre-commit-trivy.git
     rev: v0.14.0
@@ -22,7 +23,13 @@ repos:
         args:
           - --scanners
           - misconfig,secret,vuln
-          - . # last arg indicates the path/file to scan
+          - .  # last arg indicates the path/file to scan
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        args: [--strict]
 
   - repo: https://github.com/astral-sh/uv-pre-commit
     # uv version.
