@@ -68,6 +68,9 @@ done
 
 info "Using tag: ${TAG}"
 
+# Set up the Docker buildx builder for multiarch builds
+divider
+info "Setting up Docker buildx builder..."
 # Check if the builder already exists
 BUILDER_NAME="temp-multiarch-builder"
 EXISTING_BUILDER=$(docker buildx ls | grep -w "$BUILDER_NAME" || true)
@@ -85,10 +88,12 @@ docker buildx inspect --bootstrap
 success "Builder bootstrapped successfully."
 
 # Build the docker build command
+divider
+info "Constructing build command..."
+
 CMD="docker buildx build \
     --tag ${IMAGE_NAME}:${TAG} \
     --platform linux/amd64,linux/arm64"
-
 # Include --no-cache flag if set
 if [[ -n "$CACHE_FLAG" ]]; then
     CMD+=" $CACHE_FLAG"
@@ -117,14 +122,14 @@ info "Final build command:"
 echo -e "${CYAN}${CMD}${RESET}"
 
 # Execute the constructed command
-echo -e "--------------------------------------------------------------------------"
+divider
 info "Building the image..."
 eval "$CMD"
 success "Image built successfully with tag: ${TAG}"
-echo -e "--------------------------------------------------------------------------"
 
 # Output the path to the tarball if --local was passed
 if [[ -n "$LOCAL_FLAG" ]]; then
+    divider
     info "Converting the OCI image to Docker format..."
     skopeo copy --override-os linux --override-arch \
         arm64 oci-archive:"${CONTEXT}/.tmp/oci-image.tar" \
@@ -143,6 +148,8 @@ if [[ -n "$LOCAL_FLAG" ]]; then
     success "Temporary files cleaned."
 fi
 
+# Clean up after ourselves
+divider
 info "Removing builder '${BUILDER_NAME}'..."
 docker buildx rm "${BUILDER_NAME}"
 success "Builder '${BUILDER_NAME}' removed successfully."
@@ -150,6 +157,5 @@ success "Builder '${BUILDER_NAME}' removed successfully."
 info "Cleaning up unused dangling images..."
 docker image prune -f
 success "Clean-up complete. Dangling images removed."
-
+divider
 success "Build process completed!"
-
