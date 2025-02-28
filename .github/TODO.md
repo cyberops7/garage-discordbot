@@ -82,7 +82,7 @@
 
 - Docker
   - [ ] Write a healthcheck script (from discord.ext import tasks)
-  - [ ] Investigate moving to python:3.13-alpine base image
+  - [x] Investigate moving to python:3.13-alpine base image
   - [x] Move to a `docker/` directory
   - [x] A docker compose file
   - [ ] Volume mount the application code so you don't have to keep rebuilding for testing
