@@ -107,6 +107,13 @@ fi
 if [[ -n "$LOCAL_FLAG" ]]; then
     CMD+=" $LOCAL_FLAG"
     info "Image will be exported to the local Docker daemon."
+    # Make sure the .tmp/ directory exists
+    TMP_DIR="${REPO_DIR}/.tmp"
+    if [[ ! -d "$TMP_DIR" ]]; then
+        mkdir -p "$TMP_DIR"
+        info "Created directory: $TMP_DIR"
+    fi
+
 fi
 
 # Add PUSH_FLAG if it's not empty

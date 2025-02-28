@@ -4,6 +4,7 @@ __pycache__
 .pre-commit-trivy-cache
 .pyre
 .ruff_cache
+.tmp
 .venv
 log
 .env
