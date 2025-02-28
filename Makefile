@@ -9,7 +9,7 @@ SCANNER ?= trivy
 TAG ?= test
 
 .PHONY: build
-build: deps clean ## Build the Docker image with TAG
+build: deps clean ## Build the Docker image with variable: TAG
 	@bash $(SCRIPTS_DIR)/build.sh --tag $(TAG) --local
 
 .PHONY: check
@@ -37,13 +37,13 @@ fix: ## Run linters and other code quality checks in fix mode
 	@bash $(SCRIPTS_DIR)/check.sh --fix
 
 .PHONY: publish
-publish: deps clean ## Build and push the Docker image with TAG
+publish: deps clean ## Build and push the Docker image with variable: TAG
 	@bash $(SCRIPTS_DIR)/build.sh --tag $(TAG) --push
 
 .PHONY: run
-run: deps clean ## Run the Docker image locally
+run: deps clean ## Run the Docker image locally with variable: TAG
 	@bash $(SCRIPTS_DIR)/run.sh --tag $(TAG)
 
 .PHONY: scan
-scan: deps ## Scan the Docker image:TAG for vulnerabilities
+scan: deps ## Scan the Docker image for vulnerabilities - variables: TAG and SCANNER
 	@bash $(SCRIPTS_DIR)/scan.sh --tag $(TAG) --scanner $(SCANNER)

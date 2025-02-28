@@ -70,7 +70,7 @@ run_scout() {
     # Run Docker Scout analysis on the image
     docker scout cves "local://${IMAGE}"
     divider
-    docker scount recommendations "local://${IMAGE}"
+    docker scout recommendations "local://${IMAGE}"
     divider
     docker scout quickview "local://${IMAGE}"
 

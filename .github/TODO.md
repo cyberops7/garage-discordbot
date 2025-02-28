@@ -44,7 +44,7 @@
     - Run the bot container locally
   - `make scan`
     - [ ] Get other scanners working
-  - [ ] Add ARG information to target help comments
+  - [x] Add ARG information to target help comments
 
 
 - GitHub Actions
