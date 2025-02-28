@@ -26,6 +26,8 @@
   
   
 - Makefile / Core Functions
+  - `make build`
+    - [ ] add support for CACHE flag
   - `make check`
     - [x] Run linters and checkers 
     - [x] `make fix` as a fix-enabled version of `make check`
@@ -83,6 +85,7 @@
   - [ ] Investigate moving to python:3.13-alpine base image
   - [x] Move to a `docker/` directory
   - [x] A docker compose file
+  - [ ] Volume mount the application code so you don't have to keep rebuilding for testing
 
 
 - Kubernetes

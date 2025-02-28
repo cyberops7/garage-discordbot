@@ -1,5 +1,5 @@
 # Stage 1: Build Stage
-FROM python:3.13-slim-bookworm
+FROM python:3.13-alpine
 LABEL org.opencontainers.image.source=https://github.com/cyberops7/garage-discordbot
 
 # Set up default env vars
@@ -11,17 +11,16 @@ ENV APP_HOME=/app \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-# Update base packages
-RUN apt-get update && \
-    apt-get -y upgrade && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Update base packages and install Alpine dependencies
+RUN apk -U upgrade --no-cache && \
+    apk add --no-cache \
+        bash
 
 # Install `uv`
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Copy project files
-COPY ../scripts $APP_HOME
+COPY ./ $APP_HOME
 
 # Create application directory and set permissions
 RUN addgroup --system appgroup && \

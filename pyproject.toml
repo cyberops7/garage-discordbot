@@ -38,6 +38,7 @@ ignore = [
     "COM812",
     "D"
 ]
+# COM812 - ruff recommends disabling it for compatibilitiy (and will warn you about it every time)
 # D - docustring checking
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
