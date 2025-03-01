@@ -1,67 +1,58 @@
-"""Logging library"""
+"""Logging library - configure logging from a yaml config file"""
 
+import atexit
 import logging
-import os
-import sys
-from logging import Formatter, Logger, StreamHandler
-from logging.handlers import RotatingFileHandler
-from typing import TextIO
+import logging.config
+import logging.handlers
+from logging import Logger
+from pathlib import Path
+
+import yaml
+
+from lib import config_parser
+
+logging.basicConfig(
+    level=logging.INFO
+)  # change this to DEBUG if debugging logger initialization
+logger: Logger = logging.getLogger(__name__)
 
 
-def configure_logger() -> None:
-    """Set up logging"""
-    logger = create_logger()
-    logging.getLogger("discord.http").setLevel(logging.INFO)
+def configure_logger(file_path: str = "conf/logger.yaml") -> None:
+    """Set up logging using a YAML file"""
+    logger.info("Loading logging configuration from YAML file...")
 
-    # Define log format
-    formatter = create_formatter()
+    success: bool = False
+    try:
+        yaml_path = Path(file_path)
+        with Path.open(yaml_path, encoding="utf-8") as yaml_file:
+            try:
+                yaml_config = yaml.safe_load(yaml_file)
+                logger.debug("Read YAML config: %s", yaml_config)
+                yaml_config_resolved = config_parser.resolve_values(yaml_config)
+                logger.debug("Resolved YAML config: %s", yaml_config_resolved)
+                logging.config.dictConfig(yaml_config_resolved)
+                logger.info("Logging configuration loaded from YAML file.")
+                logger.debug("Logging configuration: %s", yaml_config_resolved)
 
-    # Set up file logging
-    logger.addHandler(create_file_handler(formatter))
+                # The queue handler
+                logger.info("Starting queue handler listener...")
+                queue_handler: logging.Handler | None = logging.getHandlerByName(
+                    "queue"
+                )
+                if queue_handler is not None:
+                    listener = getattr(queue_handler, "listener", None)
+                    if listener is not None:
+                        listener.start()
+                        atexit.register(listener.stop)
 
-    # Set up stdout logging
-    logger.addHandler(create_stdout_handler(formatter))
-
-
-def create_logger() -> Logger:
-    """Create a logger"""
-    logger: Logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-    return logger
-
-
-def create_file_handler(formatter: Formatter) -> RotatingFileHandler:
-    """Create a file handler with a provided formatter"""
-    log_dir: str = os.getenv("LOG_DIR", "log")
-    log_level_file_str: str = os.getenv("LOG_LEVEL_FILE", "INFO")
-    log_level_file: int = getattr(logging, log_level_file_str)
-
-    file_handler: RotatingFileHandler = RotatingFileHandler(
-        filename=f"{log_dir}/discord.log",
-        encoding="utf-8",
-        maxBytes=1024 * 1024 * 10,  # 10MB
-        backupCount=5,
-    )
-    file_handler.setLevel(log_level_file)
-    file_handler.setFormatter(formatter)
-    return file_handler
-
-
-def create_formatter() -> Formatter:
-    """Create a log formatter"""
-    return Formatter(
-        "[{asctime}] [{levelname:<7}] {name}: {message}",
-        "%Y-%m-%d %H:%M:%S",
-        style="{",
-    )
-
-
-def create_stdout_handler(formatter: Formatter) -> StreamHandler[TextIO]:
-    """Create a stdout (stream) handler with a provided formatter"""
-    log_level_stdout_str: str = os.getenv("LOG_LEVEL_STDOUT", "INFO")
-    log_level_stdout: int = getattr(logging, log_level_stdout_str)
-
-    stdout_handler: StreamHandler[TextIO] = StreamHandler(sys.stdout)
-    stdout_handler.setLevel(log_level_stdout)
-    stdout_handler.setFormatter(formatter)
-    return stdout_handler
+                success = True
+            except yaml.YAMLError:
+                logger.exception("Error parsing YAML file.")
+            except (ValueError, TypeError, KeyError, AttributeError):
+                logger.exception("Error in logging configuration.")
+    except (FileNotFoundError, PermissionError, IsADirectoryError, OSError):
+        logger.exception("Error reading logging configuration file.")
+    if not success:
+        # Apply basic logging as a fallback
+        logging.basicConfig(level=logging.DEBUG)
+        logger.info("Default logging configuration applied.")

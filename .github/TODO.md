@@ -23,6 +23,8 @@
     - [ ] Link to discord.py documentation
     - [ ] While tailored to Jim's Garage and my own dev environment, feel free to fork, etc.
     - [ ] How to run your own instance of the bot - docker, kubernetes
+      - [ ] For docker compose, you'll need to put your .env file in the same directory as your compose file
+        The current sample.env in the docker dir is a symlink to the one in the repository root
   
   
 - Makefile / Core Functions
@@ -71,13 +73,13 @@
 
 
 - Logging
-  - [ ] Logger config read from yaml/JSON file
-  - [ ] JSON log formatting
-  - [ ] Log to a queue handler to make logging non-blocking
+  - [x] Logger config read from yaml/JSON file
+  - [x] JSON log formatting
+  - [x] Log to a queue handler to make logging non-blocking
   - [x] Bash logging library
   - [x] Logs in bash files (colorized)
   - [ ] Add more logging everywhere
-  - [ ] Tune discord's noisy logs
+  - [x] Tune discord's noisy logs
 
 
 - Docker

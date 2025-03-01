@@ -7,6 +7,7 @@ services:
     environment:  # Read env vars from .env file
       BOT_TOKEN: "${BOT_TOKEN:-}"
       LOG_DIR: "${LOG_DIR:-log}"
+      LOG_FILE: "${LOG_FILE:-bot.log}"
       LOG_LEVEL_FILE: "${LOG_LEVEL_FILE:-DEBUG}"
       LOG_LEVEL_STDOUT: "${LOG_LEVEL_STDOUT:-INFO}"
     restart: unless-stopped

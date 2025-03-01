@@ -1,0 +1,72 @@
+---
+version: 1
+disable_existing_loggers: false
+
+formatters:
+  json:
+    (): lib.logger_extras.JSONFormatter
+    fmt_keys:
+      level: levelname
+      message: message
+      timestamp: timestamp
+      logger: name
+      module: module
+      function: funcName
+      line: lineno
+      thread_name: threadName
+  standard:
+    datefmt: "%Y-%m-%d %H:%M:%S"
+    format: "[{asctime}] [{levelname:<7}] {name}: {message}"
+    style: "{"
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: standard
+    level: "@env LOG_LEVEL_STDOUT,INFO"
+    stream: ext://sys.stdout
+
+  file:
+    class: logging.handlers.RotatingFileHandler
+    backupCount: 5
+    encoding: "utf-8"
+    filename: "@format {@env LOG_DIR,log}/{@env LOG_FILE,app.log}"
+    formatter: standard
+    level: "@env LOG_LEVEL_FILE,INFO"
+    maxBytes: "@math 1024 * 1024 * 10"  # 10MB
+    mode: a
+  file_json:
+    class: logging.handlers.RotatingFileHandler
+    backupCount: 5
+    encoding: "utf-8"
+    filename: "@format {@env LOG_DIR,log}/{@env LOG_FILE,app.log}.jsonl"
+    formatter: json
+    level: "@env LOG_LEVEL_FILE,INFO"
+    maxBytes: "@math 1024 * 1024 * 10"  # 10MB
+    mode: a
+  queue:
+    class: logging.handlers.QueueHandler
+    handlers:
+      - console
+      - file
+      - file_json
+    respect_handler_level: true
+
+loggers:
+  discord.gateway:
+    handlers:
+      - console
+      - file
+    level: INFO
+    propagate: false
+  discord.http:
+    handlers:
+      - console
+      - file
+    level: INFO
+    propagate: false
+
+root:
+  level: DEBUG
+  handlers:
+    - queue

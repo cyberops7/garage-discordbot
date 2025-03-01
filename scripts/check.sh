@@ -73,10 +73,10 @@ fi
 
 divider
 info "Linting bash files with shellcheck..."
-if ! shellcheck -x "${REPO_DIR}/scripts/*.sh"; then
-    error "yamllint detected issues!"
+if ! shellcheck -x "${REPO_DIR}"/scripts/*.sh; then
+    error "shellcheck detected issues!"
 else
-    success yamllint passed
+    success "shellcheck passed"
 fi
 
 
@@ -92,5 +92,5 @@ info "Linting yaml files with yamllint..."
 if ! yamllint --strict "$REPO_DIR"; then
     error "yamllint detected issues!"
 else
-    success yamllint passed
+    success "yamllint passed"
 fi
