@@ -11,9 +11,8 @@ import yaml
 
 from lib import config_parser
 
-logging.basicConfig(
-    level=logging.INFO
-)  # change this to DEBUG if debugging logger initialization
+# change this to DEBUG if debugging logger initialization
+logging.basicConfig(level=logging.INFO)
 logger: Logger = logging.getLogger(__name__)
 
 
