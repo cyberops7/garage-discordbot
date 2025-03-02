@@ -82,6 +82,11 @@
   - [x] Tune discord's noisy logs
 
 
+- API
+  - [ ] Logging config
+  - [ ] Uvicorn reverse proxy settings
+  - [ ] Uvicorn settings - workers, loop, etc.
+
 - Docker
   - [ ] Write a healthcheck script (from discord.ext import tasks)
   - [x] Investigate moving to python:3.13-alpine base image

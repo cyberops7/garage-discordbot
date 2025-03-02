@@ -5,9 +5,12 @@ description = "Discord bot for Jim's Garage"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "colorlog>=6.9.0",
     "discord>=2.3.2",
     "dotenv>=0.9.9",
+    "fastapi>=0.115.11",
     "pyyaml>=6.0.2",
+    "uvicorn>=0.34.0",
 ]
 
 [dependency-groups]

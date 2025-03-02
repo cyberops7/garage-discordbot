@@ -3,6 +3,18 @@ version: 1
 disable_existing_loggers: false
 
 formatters:
+  colored:
+    (): colorlog.ColoredFormatter
+    datefmt: "%Y-%m-%d %H:%M:%S"
+    format: "[{asctime}] [{log_color}{levelname:<7}{reset}] {name}: {message}"
+    style: "{"
+    log_colors:
+      DEBUG: cyan
+      INFO: green
+      WARNING: yellow
+      ERROR: red
+      CRITICAL: bold_red
+
   json:
     (): lib.logger_extras.JSONFormatter
     fmt_keys:
@@ -14,15 +26,37 @@ formatters:
       function: funcName
       line: lineno
       thread_name: threadName
+
   standard:
     datefmt: "%Y-%m-%d %H:%M:%S"
     format: "[{asctime}] [{levelname:<7}] {name}: {message}"
     style: "{"
 
+  uvicorn:
+    (): lib.logger_extras.AccessLogFormatter
+    datefmt: "%Y-%m-%d %H:%M:%S"
+    fmt: >
+      [{asctime}] [{log_color}{levelname:<7}{reset}] {name}:
+      {method} {path} HTTP/{http_version}
+      {status_color}{status_code} {reason_phrase}{reset}
+    style: "{"
+    log_colors:
+      DEBUG: cyan
+      INFO: green
+      WARNING: yellow
+      ERROR: red
+      CRITICAL: bold_red
+
 handlers:
   console:
     class: logging.StreamHandler
-    formatter: standard
+    formatter: colored
+    level: "@env LOG_LEVEL_STDOUT,INFO"
+    stream: ext://sys.stdout
+
+  console_uvicorn:
+    class: logging.StreamHandler
+    formatter: uvicorn
     level: "@env LOG_LEVEL_STDOUT,INFO"
     stream: ext://sys.stdout
 
@@ -35,6 +69,7 @@ handlers:
     level: "@env LOG_LEVEL_FILE,INFO"
     maxBytes: "@math 1024 * 1024 * 10"  # 10MB
     mode: a
+
   file_json:
     class: logging.handlers.RotatingFileHandler
     backupCount: 5
@@ -44,6 +79,7 @@ handlers:
     level: "@env LOG_LEVEL_FILE,INFO"
     maxBytes: "@math 1024 * 1024 * 10"  # 10MB
     mode: a
+
   queue:
     class: logging.handlers.QueueHandler
     handlers:
@@ -52,17 +88,30 @@ handlers:
       - file_json
     respect_handler_level: true
 
+  queue_uvicorn:
+    class: logging.handlers.QueueHandler
+    handlers:
+      - console_uvicorn
+      - file
+      - file_json
+    respect_handler_level: true
+
 loggers:
   discord.gateway:
     handlers:
-      - console
-      - file
+      - queue
     level: INFO
     propagate: false
+
   discord.http:
     handlers:
-      - console
-      - file
+      - queue
+    level: INFO
+    propagate: false
+
+  uvicorn.access:
+    handlers:
+      - queue_uvicorn
     level: INFO
     propagate: false
 

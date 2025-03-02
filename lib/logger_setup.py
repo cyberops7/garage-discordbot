@@ -10,6 +10,7 @@ from pathlib import Path
 import yaml
 
 from lib import config_parser
+from lib.logger_extras import custom_log_record_factory
 
 # change this to DEBUG if debugging logger initialization
 logging.basicConfig(level=logging.INFO)
@@ -19,6 +20,9 @@ logger: Logger = logging.getLogger(__name__)
 def configure_logger(file_path: str = "conf/logger.yaml") -> None:
     """Set up logging using a YAML file"""
     logger.info("Loading logging configuration from YAML file...")
+
+    # Set the global log record factory to use CustomLogRecord
+    logging.setLogRecordFactory(custom_log_record_factory)
 
     success: bool = False
     try:
@@ -33,16 +37,7 @@ def configure_logger(file_path: str = "conf/logger.yaml") -> None:
                 logger.info("Logging configuration loaded from YAML file.")
                 logger.debug("Logging configuration: %s", yaml_config_resolved)
 
-                # The queue handler
-                logger.info("Starting queue handler listener...")
-                queue_handler: logging.Handler | None = logging.getHandlerByName(
-                    "queue"
-                )
-                if queue_handler is not None:
-                    listener = getattr(queue_handler, "listener", None)
-                    if listener is not None:
-                        listener.start()
-                        atexit.register(listener.stop)
+                start_queue_listeners()
 
                 success = True
             except yaml.YAMLError:
@@ -55,3 +50,67 @@ def configure_logger(file_path: str = "conf/logger.yaml") -> None:
         # Apply basic logging as a fallback
         logging.basicConfig(level=logging.DEBUG)
         logger.info("Default logging configuration applied.")
+
+
+def get_all_handlers() -> set[logging.Handler]:
+    """
+    Retrieve all handlers from all loggers, including the root logger.
+    Returns a set of unique handlers.
+    """
+    # Start with the root logger
+    all_handlers: set[logging.Handler] = set(logging.root.handlers)
+
+    # Add handlers from all other loggers
+    for logger_obj in logging.Logger.manager.loggerDict.values():
+        if isinstance(logger_obj, logging.Logger):
+            all_handlers.update(logger_obj.handlers)
+
+    # Return the unique set of handlers
+    return all_handlers
+
+
+def start_queue_listeners() -> None:
+    """
+    Find all handlers whose names start with 'queue' and start their listeners.
+    """
+    logger.info("Checking for queue handler listeners...")
+    all_handlers = get_all_handlers()
+
+    for handler_name in all_handlers:  # Iterate through all registered handlers
+        # Extract handler instance (some entries in `_handlerList` are weakrefs)
+        try:
+            # Yes, this is dumb to have the intermediary handler_func,
+            # but this was the only way to make both ruff and pyre happy
+            if callable(handler_name):
+                handler_func = handler_name
+                handler = handler_func()
+            else:
+                handler = handler_name
+
+            if not isinstance(
+                handler, logging.Handler
+            ):  # Ensure it's a logging.Handler
+                logger.warning("Invalid handler type: %s", type(handler))
+                continue
+        except ReferenceError as e:
+            logger.warning("Weak reference expired for handler %s: %s", handler_name, e)
+            continue
+        except TypeError as e:
+            logger.warning("Type error when processing handler %s: %s", handler_name, e)
+            continue
+
+        if (
+            handler
+            and hasattr(handler, "name")
+            and handler.name
+            and handler.name.startswith("queue")
+        ):
+            logger.info("Found queue handler: %s", handler.name)
+            listener = getattr(handler, "listener", None)
+            if listener:
+                logger.info("Starting listener for handler: %s", handler.name)
+                listener.start()
+                # Ensure the listener's stop method is called on script exit
+                atexit.register(listener.stop)
+            else:
+                logger.warning("No listener found for handler: %s", handler.name)
