@@ -9,7 +9,7 @@ TBD
 ## API
 
 The bot runs a FastAPI webserver in parallel to the bot, 
-providing an API to interact with the doc.
+providing an API to interact with the bot.
 
 The webserver defaults to port `8080`, but you can customize this
 by setting the `API_PORT` environment variable.
@@ -20,6 +20,8 @@ Automatically generated API documentation is available at:
 - /redoc
 
 #### /healthcheck
+
+#### /status
 
 ## Contributing
 

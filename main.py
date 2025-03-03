@@ -1,17 +1,16 @@
 """Driver for the garage-discordbot project"""
 
+import asyncio
 import logging.handlers
 import os
 import sys
 from logging import Logger
-from threading import Thread
 
 import discord
-import uvicorn
 from discord import Intents
 from dotenv import load_dotenv
 
-from lib.api import app
+from lib.api import start_fastapi_server
 from lib.bot import DiscordBot
 from lib.logger_setup import configure_logger
 from lib.utils import validate_port
@@ -19,14 +18,7 @@ from lib.utils import validate_port
 logger: Logger = logging.getLogger(__name__)
 
 
-def start_fastapi_server(port: int = 8080) -> None:
-    """
-    Start the FastAPI server
-    """
-    uvicorn.run(app, host="0.0.0.0", port=port, log_config=None)  # noqa: S104
-
-
-def main() -> None:
+async def main() -> None:
     """Main driver function"""
     # Load .env contents into system ENV
     # !! Vars defined in .env will override any default env var values !!
@@ -46,12 +38,6 @@ def main() -> None:
     if not api_port:
         sys.exit(1)
 
-    # Run health check in a separate thread
-    api_thread = Thread(
-        target=start_fastapi_server, daemon=True, kwargs={"port": api_port}
-    )
-    api_thread.start()
-
     # Retrieve bot token
     logger.info("Retrieving bot token...")
     if not (bot_token := os.getenv("BOT_TOKEN")):
@@ -63,9 +49,27 @@ def main() -> None:
     intents: Intents = discord.Intents.all()
     bot: DiscordBot = DiscordBot(intents=intents)
 
-    # Run the bot
-    bot.run(bot_token, log_handler=None)
+    # Create a task for the FastAPI server
+    logger.info("Starting FastAPI server...")
+    api_task = asyncio.create_task(start_fastapi_server(bot=bot, port=api_port))
+
+    # Run the Discord bot
+    logger.info("Starting Discord bot...")
+    try:
+        await bot.start(bot_token)
+    except asyncio.CancelledError:
+        logger.info("FastAPI server task cancelled.")
+    finally:
+        # Optionally ensure FastAPI server task is finalized when bot stops
+        api_task.cancel()
+        try:
+            await api_task
+        except asyncio.CancelledError:
+            logger.info("FastAPI server task cancelled.")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        logger.info("Shutting down gracefully...")

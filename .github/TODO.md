@@ -83,12 +83,12 @@
 
 
 - API
-  - [ ] Logging config
+  - [x] Logging config
   - [ ] Uvicorn reverse proxy settings
   - [ ] Uvicorn settings - workers, loop, etc.
 
 - Docker
-  - [ ] Write a healthcheck script (from discord.ext import tasks)
+  - [ ] ~~Write a healthcheck script (from discord.ext import tasks)~~
   - [x] Investigate moving to python:3.13-alpine base image
   - [x] Move to a `docker/` directory
   - [x] A docker compose file

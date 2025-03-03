@@ -16,7 +16,9 @@ ENV API_PORT=8080 \
 # Update base packages and install Alpine dependencies
 RUN apk -U upgrade --no-cache && \
     apk add --no-cache \
-        bash
+        bash \
+        curl \
+        jq
 
 # Install `uv`
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
@@ -43,4 +45,5 @@ RUN uv sync --frozen --no-cache --no-dev
 CMD ["uv", "run", "--no-dev", "main.py"]
 
 # Placeholder healthcheck until a real one is ready
-HEALTHCHECK CMD echo "Placeholder health check" || exit 0
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+    CMD curl -s http://localhost:8080/healthcheck | jq -e '.status == "ok"' > /dev/null || exit 1
