@@ -16,12 +16,12 @@ by setting the `API_PORT` environment variable.
 
 ### Endpoints
 Automatically generated API documentation is available at:
-- /docs
-- /redoc
+- `/docs`
+- `/redoc`
 
-#### /healthcheck
+#### GET /healthcheck
 
-#### /status
+#### GET /status
 
 ## Contributing
 

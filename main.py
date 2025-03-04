@@ -60,7 +60,7 @@ async def main() -> None:
     except asyncio.CancelledError:
         logger.info("FastAPI server task cancelled.")
     finally:
-        # Optionally ensure FastAPI server task is finalized when bot stops
+        # Ensure FastAPI server task is finalized when bot stops
         api_task.cancel()
         try:
             await api_task

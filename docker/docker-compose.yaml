@@ -11,6 +11,8 @@ services:
       LOG_FILE: "${LOG_FILE:-bot.log}"
       LOG_LEVEL_FILE: "${LOG_LEVEL_FILE:-DEBUG}"
       LOG_LEVEL_STDOUT: "${LOG_LEVEL_STDOUT:-INFO}"
+    ports:
+      - "8080:8080"
     restart: unless-stopped
     volumes:
       - ./log:/app/${LOG_DIR}

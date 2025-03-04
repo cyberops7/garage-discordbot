@@ -34,6 +34,7 @@ info "Using tag: ${TAG}"
 info "Starting container '${CONTAINER_NAME}': ${IMAGE}:${TAG}"
 docker run --name "${CONTAINER_NAME}" \
     --env-file .env \
+    -p 8080:8080 \
     -dit \
     "${IMAGE}":"${TAG}"
 
