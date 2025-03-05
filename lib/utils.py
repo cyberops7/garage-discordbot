@@ -21,8 +21,9 @@ def validate_port(port: int) -> int:
     """
     Wrapper to validate the port and handle errors.
     """
+    logger.debug("Validating targeted port: %s...", port)
     try:
         return ensure_valid_port(port)  # Abstract raising logic here
     except ValueError:
-        logger.exception("API_PORT is not valid: %s", port)
+        logger.exception("Targeted port is not valid: %s", port)
         sys.exit(1)

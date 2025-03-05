@@ -28,15 +28,7 @@ async def main() -> None:
     configure_logger()
 
     # Validate the port number
-    api_port: int | None = None
-    try:
-        api_port = int(os.getenv("API_PORT", "8080"))
-        validate_port(api_port)
-    except ValueError:
-        msg = f"API_PORT is not a valid port integer: {os.getenv('API_PORT')}"
-        logger.exception(msg)
-    if not api_port:
-        sys.exit(1)
+    api_port = validate_port(int(os.getenv("API_PORT", "8080")))
 
     # Retrieve bot token
     logger.info("Retrieving bot token...")

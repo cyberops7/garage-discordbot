@@ -182,3 +182,13 @@ To enable it, run:
 ```shell
 pre-commit install
 ```
+
+## Running the app
+During development, you may not want to keep building the Docker image and running the container
+when you're iterating.
+
+To easily run the app, you can use `uv`:
+```shell
+uv run main.py
+```
+`uv` will transparently activate the virtual environment and run the app inside it.

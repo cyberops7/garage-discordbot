@@ -1,4 +1,3 @@
-# Run with: docker compose up -d
 ---
 services:
   discord-bot:

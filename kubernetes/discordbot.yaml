@@ -1,0 +1,134 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: discordbot
+  annotations:
+    field.cattle.io/projectId: local:p-cdpfx  # Rancher Project: Services
+
+---
+apiVersion: onepassword.com/v1
+kind: OnePasswordItem
+metadata:
+  name: bot-secrets
+  namespace: discordbot
+spec:
+  itemPath: <<< REPLACE_ITEM_PATH >>>
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-ceph-discordbot
+  namespace: discordbot
+  labels:
+    app: bot
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: "ceph-block"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bot
+  namespace: discordbot
+  labels:
+    app: bot
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: bot
+  template:
+    metadata:
+      labels:
+        app: bot
+    spec:
+      containers:
+        - name: bot
+          image: ghcr.io/cyberops7/discord-bot:test
+          imagePullPolicy: Always
+          env:
+            - name: BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: bot-secrets
+                  key: BOT_TOKEN
+            - name: LOG_LEVEL_FILE
+              value: "DEBUG"
+            - name: LOG_LEVEL_STDOUT
+              value: "INFO"
+          ports:
+            - name: bot-api
+              containerPort: 8080
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsUser: 10001
+            runAsGroup: 10001
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - name: logs
+              mountPath: /app/log
+      nodeSelector:
+        role: worker
+      volumes:
+        - name: logs
+          persistentVolumeClaim:
+            claimName: pvc-ceph-discordbot
+
+---
+# API reachable from within cluster at: bot.discordbot.svc.cluster.local
+apiVersion: v1
+kind: Service
+metadata:
+  name: bot
+  namespace: discordbot
+  labels:
+    app: bot
+spec:
+  selector:
+    app: bot
+  ports:
+    - name: bot-api
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  type: ClusterIP

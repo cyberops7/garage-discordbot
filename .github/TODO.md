@@ -80,6 +80,7 @@
   - [x] Logs in bash files (colorized)
   - [ ] Add more logging everywhere
   - [x] Tune discord's noisy logs
+  - [ ] 
 
 
 - API
@@ -87,12 +88,13 @@
   - [ ] Uvicorn reverse proxy settings
   - [ ] Uvicorn settings - workers, loop, etc.
 
+
 - Docker
   - [ ] ~~Write a healthcheck script (from discord.ext import tasks)~~
   - [x] Investigate moving to python:3.13-alpine base image
   - [x] Move to a `docker/` directory
   - [x] A docker compose file
-  - [ ] Volume mount the application code so you don't have to keep rebuilding for testing
+  - [x] Expose/map the API port
 
 
 - Kubernetes

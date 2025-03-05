@@ -3,6 +3,7 @@ import logging
 import uvicorn
 from discord import ClientUser
 from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 from lib.bot import DiscordBot
@@ -30,14 +31,24 @@ class HealthCheckResponse(BaseModel):
 
 
 @app.get("/healthcheck")
-async def healthcheck(request: Request) -> HealthCheckResponse:
+async def healthcheck(request: Request) -> JSONResponse:
     """
     Healthcheck endpoint that uses the Discord bot instance to check readiness.
     """
     bot = request.app.state.bot
     if bot.is_ready():
-        return HealthCheckResponse(status="ok", message="Bot is running and ready")
-    return HealthCheckResponse(status="not_ready", message="Bot is not ready")
+        return JSONResponse(
+            status_code=200,
+            content=HealthCheckResponse(
+                status="ok", message="Bot is running and ready"
+            ).model_dump(),
+        )
+    return JSONResponse(
+        status_code=503,
+        content=HealthCheckResponse(
+            status="not_ready", message="Bot is not ready"
+        ).model_dump(),
+    )
 
 
 class StatusResponse(BaseModel):
