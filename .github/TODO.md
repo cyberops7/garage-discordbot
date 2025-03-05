@@ -85,6 +85,7 @@
 
 - API
   - [x] Logging config
+  - [ ] API logs to separate file
   - [ ] Uvicorn reverse proxy settings
   - [ ] Uvicorn settings - workers, loop, etc.
 
@@ -95,10 +96,11 @@
   - [x] Move to a `docker/` directory
   - [x] A docker compose file
   - [x] Expose/map the API port
+  - [ ] Run as non-root user
 
 
 - Kubernetes
-  - [ ] Create `kubernetes/` directory with manifests
+  - [x] Create `kubernetes/` directory with manifests
   - [ ] Pull those into or from internal k3s repo (TBD)
   - [ ] Trivy config scanning: https://trivy.dev/v0.57/docs/scanner/misconfiguration/
 

@@ -68,21 +68,25 @@ spec:
             - name: bot-api
               containerPort: 8080
               protocol: TCP
+          # Ensure container is ready to handle traffic;
+          # if not, remove from load balancer
           readinessProbe:
             httpGet:
               path: /healthcheck
               port: 8080
             initialDelaySeconds: 5
-            periodSeconds: 10
+            periodSeconds: 60
             timeoutSeconds: 3
             successThreshold: 1
             failureThreshold: 3
+          # Ensure container is alive;
+          # if it fails, restart the container
           livenessProbe:
             httpGet:
               path: /healthcheck
               port: 8080
             initialDelaySeconds: 10
-            periodSeconds: 30
+            periodSeconds: 60
             timeoutSeconds: 5
             successThreshold: 1
             failureThreshold: 3
@@ -99,18 +103,27 @@ spec:
               drop:
                 - ALL
             readOnlyRootFilesystem: true
-            runAsUser: 10001
-            runAsGroup: 10001
-            runAsNonRoot: true
-            seccompProfile:
-              type: RuntimeDefault
           volumeMounts:
-            - name: logs
+            - name: bot-storage
+              mountPath: /.cache/uv
+              subPath: uv-cache
+            - name: bot-storage
               mountPath: /app/log
+              subPath: logs
+            - name: bot-storage
+              mountPath: /tmp
+              subPath: tmp
       nodeSelector:
         role: worker
+      securityContext:
+        fsGroup: 10001
+        runAsUser: 10001
+        runAsGroup: 10001
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       volumes:
-        - name: logs
+        - name: bot-storage
           persistentVolumeClaim:
             claimName: pvc-ceph-discordbot
 
