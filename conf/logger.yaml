@@ -32,7 +32,7 @@ formatters:
     format: "[{asctime}] [{levelname:<7}] {name}: {message}"
     style: "{"
 
-  uvicorn:
+  api:
     (): lib.logger_extras.AccessLogFormatter
     datefmt: "%Y-%m-%d %H:%M:%S"
     fmt: >
@@ -54,9 +54,9 @@ handlers:
     level: "@env LOG_LEVEL_STDOUT,INFO"
     stream: ext://sys.stdout
 
-  console_uvicorn:
+  console_api:
     class: logging.StreamHandler
-    formatter: uvicorn
+    formatter: api
     level: "@env LOG_LEVEL_STDOUT,INFO"
     stream: ext://sys.stdout
 
@@ -65,6 +65,16 @@ handlers:
     backupCount: 5
     encoding: "utf-8"
     filename: "@format {@env LOG_DIR,log}/{@env LOG_FILE,app.log}"
+    formatter: standard
+    level: "@env LOG_LEVEL_FILE,INFO"
+    maxBytes: "@math 1024 * 1024 * 10"  # 10MB
+    mode: a
+
+  file_api:
+    class: logging.handlers.RotatingFileHandler
+    backupCount: 5
+    encoding: "utf-8"
+    filename: "@format {@env LOG_DIR,log}/api.log"
     formatter: standard
     level: "@env LOG_LEVEL_FILE,INFO"
     maxBytes: "@math 1024 * 1024 * 10"  # 10MB
@@ -85,15 +95,15 @@ handlers:
     handlers:
       - console
       - file
-      - file_json
+      # - file_json
     respect_handler_level: true
 
-  queue_uvicorn:
+  queue_api:
     class: logging.handlers.QueueHandler
     handlers:
-      - console_uvicorn
-      - file
-      - file_json
+      - console_api
+      - file_api
+      # - file_json_api
     respect_handler_level: true
 
 loggers:
@@ -111,7 +121,7 @@ loggers:
 
   uvicorn.access:
     handlers:
-      - queue_uvicorn
+      - queue_api
     level: INFO
     propagate: false
 

@@ -85,7 +85,7 @@
 
 - API
   - [x] Logging config
-  - [ ] API logs to separate file
+  - [x] API logs to separate file
   - [ ] Uvicorn reverse proxy settings
   - [ ] Uvicorn settings - workers, loop, etc.
 
@@ -101,6 +101,7 @@
 
 - Kubernetes
   - [x] Create `kubernetes/` directory with manifests
+  - [ ] Use a prod tag, not test
   - [ ] Pull those into or from internal k3s repo (TBD)
   - [ ] Trivy config scanning: https://trivy.dev/v0.57/docs/scanner/misconfiguration/
 
