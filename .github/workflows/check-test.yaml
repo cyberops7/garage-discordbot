@@ -8,6 +8,9 @@ on:  # yamllint disable-line rule:truthy
   workflow_call:  # Allow this workflow to be called by other workflows
     inputs: {}
 
+env:  # Global environment variables
+  UV_VERSION: "0.6.4"  # Global variable for UV version
+
 jobs:
   # Run code quality checks
   check:
@@ -24,7 +27,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           # Install a specific version of uv.
-          version: "0.6.4"
+          version: ${{ env.UV_VERSION }}
 
       # Install Python
       - name: Install Python
@@ -35,6 +38,12 @@ jobs:
       # Install dependencies
       - name: Install the project
         run: uv sync --dev
+
+      # Install trivy
+      - name: Manual Trivy Setup
+        uses: aquasecurity/setup-trivy@v0.2.0
+        with:
+          cache: true
 
       # Run checks
       - name: Run various
@@ -90,7 +99,7 @@ jobs:
           source scripts/logger.sh
           if [ "$PR_VERSION" == "$MAIN_VERSION" ]; then
             error "::error::Version in pyproject.toml ($PR_VERSION) matches version in main ($MAIN_VERSION)."
-            error "::error::Increment the version, run `uv sync`, and commit the changes."
+            error "::error::Increment the version, run 'uv sync', and commit the changes."
             exit 1
           else
            success "Version in pyproject.toml has been updated (PR: $PR_VERSION, Main: $MAIN_VERSION)."
