@@ -17,6 +17,7 @@
     - [ ] Add hyperlinks to tools table
     - Testing
       - [ ] How to run locally
+    - [ ] Update the `version` in `pyproject.toml`
   - README
     - [ ] Bot features
     - [ ] Brief architecture overview

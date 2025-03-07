@@ -1,0 +1,58 @@
+---
+name: Build and Publish Docker Image
+
+on:  # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - main  # Trigger workflow on push to the "main" branch
+  workflow_dispatch:  # Allow manual triggering of the workflow
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the code repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Extract the version from pyproject.toml
+      - name: Read version from pyproject.toml
+        id: get_version
+        run: |
+          VERSION=$(python3 -c "import tomllib; \
+            print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
+          MAJOR_VERSION=$(echo $VERSION | cut -d'.' -f1)
+          MINOR_VERSION=$(echo $VERSION | cut -d'.' -f2)
+          PATCH_VERSION=$(echo $VERSION | cut -d'.' -f3)
+          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "major_version=$MAJOR_VERSION" >> $GITHUB_ENV
+          echo "minor_version=${MAJOR_VERSION}.${MINOR_VERSION}" >> $GITHUB_ENV
+          echo "patch_version=$VERSION" >> $GITHUB_ENV
+
+
+      # Set up Docker Buildx (for multi-platform builds)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Log in to GitHub Container Registry
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Build and push the image
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./docker/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:v${{ env.major_version }}
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:v${{ env.minor_version }}
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:v${{ env.patch_version }}

@@ -46,6 +46,20 @@ If all goes well, you should see logs like the following:
 [2025-03-05 04:39:39] [INFO   ] uvicorn.access: GET /healthcheck HTTP/1.1 200 OK
 ```
 
+### Available tags
+Each image will be published with 4 tags: `latest`, the major version, the minor version, and the patch version.
+For example, for a version of 1.3.12, the tags would be:
+- `latest`
+- `v1`
+- `v1.3`
+- `v1.3.12`
+
+This gives you flexibility in how discrete you want to be in choosing the version of the bot that you run.
+I strongly discourage using `latest`.  You never know what might get written over that tag,
+and the next time you restart your container there would be a decent chance of pulling a broken or 
+unexpected image.
+
+
 ### Docker
 Make your own copy of the `sample.env` for yourself with your bot token.
 The `.env` file is `.gitignore`'d to keep any tokens out of Git.
@@ -75,7 +89,7 @@ There are a few things that you'll need to customize:
 I am using a `.gitignore`'d Kustomize manifest to add my correct 1Password vault path.
 A sample Kustomize manifest is included if you are curious about that.
 
-The namespace also includes a `projectId` annotation unique to the my Rancher instance to put 
+The namespace also includes a `projectId` annotation unique to my Rancher instance to put 
 the namespace into a project automatically.  Update it for yours, or just remove it.
 
 To test the manifest generation using Kustomize:
