@@ -8,7 +8,7 @@ on:  # yamllint disable-line rule:truthy
   workflow_call:  # Allow this workflow to be called by other workflows
     inputs: {}
 
-env:  # Global environment variables
+env:
   UV_VERSION: "0.6.4"  # Global variable for UV version
 
 jobs:
@@ -42,11 +42,9 @@ jobs:
       # Install trivy
       - name: Manual Trivy Setup
         uses: aquasecurity/setup-trivy@v0.2.0
-        with:
-          cache: true
 
       # Run checks
-      - name: Run various
+      - name: Run the suite of checks
         run: make check
 
       # Verify that uv.lock is up to date
@@ -97,12 +95,14 @@ jobs:
       - name: Compare versions
         run: |
           source scripts/logger.sh
-          if [ "$PR_VERSION" == "$MAIN_VERSION" ]; then
-            error "::error::Version in pyproject.toml ($PR_VERSION) matches version in main ($MAIN_VERSION)."
+          if [ "${{ env.pr_version }}" == "${{ env.main_version }}" ]; then
+            error "::error::Version in pyproject.toml (${{ env.pr_version }}) matches version in main \
+          (${{ env.main_version }})."
             error "::error::Increment the version, run 'uv sync', and commit the changes."
             exit 1
           else
-           success "Version in pyproject.toml has been updated (PR: $PR_VERSION, Main: $MAIN_VERSION)."
+           success "Version in pyproject.toml has been updated (PR: ${{ env.pr_version }}, \
+          Main: ${{ env.main_version }})."
           fi
 
   # Make sure the container builds and passes basic tests
@@ -118,7 +118,7 @@ jobs:
 
       # Capture the PR number as an environment variable
       - name: Set PR Number
-        run: echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+        run: echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
 
       # Set up Docker Buildx (for multi-platform builds)
       - name: Set up Docker Buildx
@@ -132,7 +132,7 @@ jobs:
           file: ./docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: false
-          tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:pr-${PR_NUMBER}
+          tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:pr-${{ env.pr_number }}
 
       # Test the Docker image
       # Assumes you have some method to run tests within the container

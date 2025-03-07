@@ -54,11 +54,12 @@
 
 - GitHub Actions
   - Submitted PRs
-    - [ ] Lint/check code
-    - [ ] Build image
+    - [x] Lint/check code
+    - [x] Build image
+    - [ ] Run automated/unit tests
     - [ ] Scan image
   - Accepted PRs
-    - [ ] Build and publish image to ghcr
+    - [x] Build and publish image to ghcr
 
 
 - Pre-commit Hooks
