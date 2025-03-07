@@ -5,6 +5,8 @@ on:  # yamllint disable-line rule:truthy
   pull_request:
     branches:
       - main  # Trigger on pull requests targeting the "main" branch
+  workflow_call:  # Allow this workflow to be called by other workflows
+    inputs: {}
 
 jobs:
   # Run code quality checks
@@ -95,7 +97,7 @@ jobs:
           fi
 
   # Make sure the container builds and passes basic tests
-  build-test:
+  docker-build-test:
     name: Build and Test Docker Image
     runs-on: ubuntu-latest
     needs: check

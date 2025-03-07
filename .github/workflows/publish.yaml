@@ -12,7 +12,12 @@ permissions:
   packages: write
 
 jobs:
-  docker:
+  run-check-test:
+    name: Run Check-Test Workflow
+    uses: .github/workflows/check-test.yaml
+    with: {}
+
+  docker-publish:
     runs-on: ubuntu-latest
 
     steps:
