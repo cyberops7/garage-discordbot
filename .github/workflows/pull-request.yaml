@@ -38,6 +38,17 @@ jobs:
       - name: Run various
         run: make check
 
+      # Verify that uv.lock is up to date
+      - name: Verify uv.lock file
+        run: |
+          # Check for changes in the lock file
+          if [[ $(git status --porcelain uv.lock) ]]; then
+            echo "::error::uv.lock file is not up to date. Run 'uv sync' and commit the changes."
+            exit 1
+          else
+            echo "uv.lock file is up to date."
+          fi
+
   # Make sure the version in pyproject.toml has been incremented
   check-version:
     name: Check pyproject.toml version
@@ -76,7 +87,8 @@ jobs:
         run: |
           source scripts/logger.sh
           if [ "$PR_VERSION" == "$MAIN_VERSION" ]; then
-            error "Version in pyproject.toml ($PR_VERSION) has not been incremented compared to main ($MAIN_VERSION)."
+            error "::error::Version in pyproject.toml ($PR_VERSION) matches version in main ($MAIN_VERSION)."
+            error "::error::Increment the version, run `uv sync`, and commit the changes."
             exit 1
           else
            success "Version in pyproject.toml has been updated (PR: $PR_VERSION, Main: $MAIN_VERSION)."
