@@ -14,10 +14,11 @@ permissions:
 jobs:
   run-check-test:
     name: Run Check-Test Workflow
-    uses: .github/workflows/check-test.yaml
+    uses: .github/workflows/check-test.yaml@main
     with: {}
 
   docker-publish:
+    name: Build and Push Image
     runs-on: ubuntu-latest
 
     steps:
