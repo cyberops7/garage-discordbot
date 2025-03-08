@@ -9,9 +9,9 @@ on:  # yamllint disable-line rule:truthy
     inputs:
       run_check_version:
         description: "Run the check-version job"
-        default: true
+        default: "true"
         required: false
-        type: boolean
+        type: string
 
 env:
   UV_VERSION: "0.6.4"  # Global variable for UV version
@@ -68,7 +68,7 @@ jobs:
   check-version:
     name: Check Project Version
     runs-on: ubuntu-latest
-    if: ${{ inputs.run_check_version == true || inputs.run_check_version == null }}
+    if: ${{ inputs.run_check_version == 'true' || inputs.run_check_version == null }}
 
     steps:
       - name: Debug Inputs
@@ -91,7 +91,7 @@ jobs:
           PR_VERSION=$(python3 -c "import tomllib; \
             print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
           echo "pr_version=$PR_VERSION" >> $GITHUB_ENV
-          info "pr_version = ${{ env.pr_version }}"
+          info "pr_version = $PR_VERSION"
 
       # Fetch the main branch
       - name: Fetch main branch
@@ -107,7 +107,7 @@ jobs:
           MAIN_VERSION=$(git show main:pyproject.toml | python3 -c "import tomllib, sys; \
             print(tomllib.load(sys.stdin.buffer)['project']['version'])")
           echo "main_version=$MAIN_VERSION" >> $GITHUB_ENV
-          info "main_version = ${{ env.main_version }}"
+          info "main_version = $MAIN_VERSION"
 
       # Compare versions
       - name: Compare versions

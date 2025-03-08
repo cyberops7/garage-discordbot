@@ -16,7 +16,7 @@ jobs:
     name: Run Check-Test Workflow
     uses: cyberops7/discord-bot/.github/workflows/check-test.yaml@main
     with:
-      run_check_version: false
+      run_check_version: "false"
 
   docker-publish:
     name: Build and Push Image
