@@ -72,6 +72,7 @@
   - [x] yamllint
   - [x] shellcheck
   - [ ] look for other good python pre-commit checks
+  - [ ] check project version
 
 
 - Logging
