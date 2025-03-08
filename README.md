@@ -1,4 +1,4 @@
-# garage-discordbot
+# discord-bot
 
 A bot for Jim's Garage Discord Server
 
