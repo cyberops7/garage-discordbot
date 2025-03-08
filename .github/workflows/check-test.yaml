@@ -70,6 +70,11 @@ jobs:
     if: ${{ inputs.run_check_version == true || inputs.run_check_version == null }}
 
     steps:
+      - name: Debug Inputs
+        run: |
+          echo "The value of the input 'run_check_version': ${{ inputs.run_check_version }}"
+          echo "Other inputs or environment variables can be inspected here."
+
       # Check out the pull request code
       - name: Checkout the PR branch
         uses: actions/checkout@v3
@@ -80,9 +85,11 @@ jobs:
       - name: Get version from PR branch
         id: pr_version
         run: |
+          source scripts/logger.sh
           PR_VERSION=$(python3 -c "import tomllib; \
             print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
           echo "pr_version=$PR_VERSION" >> $GITHUB_ENV
+          info "pr_version = ${{ env.pr_version }}
 
       # Fetch the main branch
       - name: Fetch main branch
@@ -93,9 +100,11 @@ jobs:
       - name: Get version from main branch
         id: main_version
         run: |
+          source scripts/logger.sh
           MAIN_VERSION=$(git show main:pyproject.toml | python3 -c "import tomllib, sys; \
             print(tomllib.load(sys.stdin.buffer)['project']['version'])")
           echo "main_version=$MAIN_VERSION" >> $GITHUB_ENV
+          info "main_version = ${{ env.main_version }}
 
       # Compare versions
       - name: Compare versions
