@@ -16,7 +16,7 @@ info "Repo directory: ${REPO_DIR}"
 # Define context and Dockerfile relative to the script location
 CONTEXT="${REPO_DIR}"
 DOCKERFILE="${REPO_DIR}/docker/Dockerfile"
-IMAGE_NAME=ghcr.io/cyberops7/discord-bot
+IMAGE_NAME=ghcr.io/cyberops7/discord_bot
 
 # Default values
 CACHE_FLAG="--no-cache"     # Default behavior is to disable caching

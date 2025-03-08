@@ -47,3 +47,7 @@ run: deps clean ## Run the Docker image locally with variable: TAG
 .PHONY: scan
 scan: deps ## Scan the Docker image for vulnerabilities - variables: TAG and SCANNER
 	@bash $(SCRIPTS_DIR)/scan.sh --tag $(TAG) --scanner $(SCANNER)
+
+.PHONY: test
+test:  ## Run pytest unit testing
+	@bash $(SCRIPTS_DIR)/test.sh

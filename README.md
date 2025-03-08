@@ -1,4 +1,4 @@
-# discord-bot
+# discord_bot
 
 A bot for Jim's Garage Discord Server
 
@@ -68,7 +68,7 @@ docker run --name bot \
     --env-file .env \
     -p 8080:8080 \
     -dit \
-    ghcr.io/cyberops7/discord-bot:"${TAG}"
+    ghcr.io/cyberops7/discord_bot:"${TAG}"
 ```
 
 ### Docker Compose

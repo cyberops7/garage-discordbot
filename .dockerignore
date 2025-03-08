@@ -12,6 +12,7 @@ docker/
 kubernetes/
 log/
 scripts/
+.coverage
 .dockerignore
 .env
 .gitignore

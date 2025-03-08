@@ -156,6 +156,4 @@ jobs:
       # Assumes you have some method to run tests within the container
       # Example below is generic and can be adapted for your needs
       - name: Run Tests in Docker Container
-        run: |
-          echo "make test - TBD"
-        # make test TAG=pr-${PR_NUMBER}
+        run: make test

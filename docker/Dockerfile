@@ -1,7 +1,7 @@
 # Stage 1: Build Stage
 FROM python:3.13-alpine
 LABEL org.opencontainers.image.description="A discord bot built on discord.py with a FastAPI app providing a healthcheck endpoint"
-LABEL org.opencontainers.image.source=https://github.com/cyberops7/garage-discordbot
+LABEL org.opencontainers.image.source=https://github.com/cyberops7/discord_bot
 
 # Set up default env vars
 ENV API_PORT=8080 \
