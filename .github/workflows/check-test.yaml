@@ -60,7 +60,7 @@ jobs:
 
   # Make sure the version in pyproject.toml has been incremented
   check-version:
-    name: Check pyproject.toml version
+    name: Check Project Version
     runs-on: ubuntu-latest
 
     steps:
