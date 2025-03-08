@@ -49,6 +49,9 @@
     - Run the bot container locally
   - `make scan`
     - [ ] Get other scanners working
+  - `make test`
+    - [ ] add support for flag to run tests inside container
+      - That will need to include having uv install deps
   - [x] Add ARG information to target help comments
 
 

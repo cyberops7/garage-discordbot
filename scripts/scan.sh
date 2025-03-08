@@ -39,7 +39,7 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # Define the full image name
-IMAGE="ghcr.io/cyberops7/discord-bot:$TAG"
+IMAGE="ghcr.io/cyberops7/discord_bot:$TAG"
 
 info "Selected scanner: ${SCANNER}"
 info "Targeted image: ${IMAGE}"
