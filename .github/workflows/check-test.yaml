@@ -56,11 +56,12 @@ jobs:
       - name: Verify uv.lock file
         run: |
           # Check for changes in the lock file
+          source scripts/logger.sh
           if [[ $(git status --porcelain uv.lock) ]]; then
-            echo "::error::uv.lock file is not up to date. Run 'uv sync' and commit the changes."
+            error "::error::uv.lock file is not up to date. Run 'uv sync' and commit the changes."
             exit 1
           else
-            echo "uv.lock file is up to date."
+            success "uv.lock file is up to date."
           fi
 
   # Make sure the version in pyproject.toml has been incremented
@@ -85,11 +86,12 @@ jobs:
       - name: Get version from PR branch
         id: pr_version
         run: |
+          # Set pr_version
           source scripts/logger.sh
           PR_VERSION=$(python3 -c "import tomllib; \
             print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
           echo "pr_version=$PR_VERSION" >> $GITHUB_ENV
-          info "pr_version = ${{ env.pr_version }}
+          info "pr_version = ${{ env.pr_version }}"
 
       # Fetch the main branch
       - name: Fetch main branch
@@ -100,15 +102,17 @@ jobs:
       - name: Get version from main branch
         id: main_version
         run: |
+          # Set main_version
           source scripts/logger.sh
           MAIN_VERSION=$(git show main:pyproject.toml | python3 -c "import tomllib, sys; \
             print(tomllib.load(sys.stdin.buffer)['project']['version'])")
           echo "main_version=$MAIN_VERSION" >> $GITHUB_ENV
-          info "main_version = ${{ env.main_version }}
+          info "main_version = ${{ env.main_version }}"
 
       # Compare versions
       - name: Compare versions
         run: |
+          # Compare pr_version and main_version
           source scripts/logger.sh
           if [ "${{ env.pr_version }}" == "${{ env.main_version }}" ]; then
             error "::error::Version in pyproject.toml (${{ env.pr_version }}) matches version in main \
