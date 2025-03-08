@@ -1,6 +1,6 @@
 [project]
 name = "discord-bot"
-version = "0.2.2"
+version = "0.2.3"
 description = "Discord bot for Jim's Garage"
 readme = "README.md"
 requires-python = ">=3.13"
