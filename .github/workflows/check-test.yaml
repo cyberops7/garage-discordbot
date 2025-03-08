@@ -8,7 +8,7 @@ on:  # yamllint disable-line rule:truthy
   workflow_call:  # Allow this workflow to be called by other workflows
     inputs:
       run_check_version:
-        description: "Skip the check-version job"
+        description: "Run the check-version job"
         default: true
         required: false
         type: boolean
