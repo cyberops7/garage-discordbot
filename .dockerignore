@@ -12,6 +12,7 @@ docker/
 kubernetes/
 log/
 scripts/
+tests/
 .coverage
 .dockerignore
 .env

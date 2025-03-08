@@ -143,6 +143,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       # Build the Docker image (without pushing it)
+      # Need to have a test dockerfile that includes the test files and dev dependencies
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
@@ -152,8 +153,6 @@ jobs:
           push: false
           tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:pr-${{ env.pr_number }}
 
-      # Test the Docker image
-      # Assumes you have some method to run tests within the container
-      # Example below is generic and can be adapted for your needs
+      # Run tests inside the Docker image
       - name: Run Tests in Docker Container
-        run: make test
+        run: make test  # need to add a flag to
