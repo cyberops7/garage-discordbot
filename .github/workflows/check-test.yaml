@@ -7,9 +7,9 @@ on:  # yamllint disable-line rule:truthy
       - main  # Trigger on pull requests targeting the "main" branch
   workflow_call:  # Allow this workflow to be called by other workflows
     inputs:
-      skip_check_version:
+      run_check_version:
         description: "Skip the check-version job"
-        default: false
+        default: true
         required: false
         type: boolean
 
@@ -67,7 +67,7 @@ jobs:
   check-version:
     name: Check Project Version
     runs-on: ubuntu-latest
-    if: ${{ inputs.skip_check_version}}
+    if: ${{ inputs.run_check_version || inputs.run_check_version == null }}
 
     steps:
       # Check out the pull request code
