@@ -6,7 +6,12 @@ on:  # yamllint disable-line rule:truthy
     branches:
       - main  # Trigger on pull requests targeting the "main" branch
   workflow_call:  # Allow this workflow to be called by other workflows
-    inputs: {}
+    inputs:
+      skip_check_version:
+        description: "Skip the check-version job"
+        default: false
+        required: false
+        type: boolean
 
 env:
   UV_VERSION: "0.6.4"  # Global variable for UV version
@@ -62,6 +67,7 @@ jobs:
   check-version:
     name: Check Project Version
     runs-on: ubuntu-latest
+    if: ${{ inputs.skip_check_version}}
 
     steps:
       # Check out the pull request code

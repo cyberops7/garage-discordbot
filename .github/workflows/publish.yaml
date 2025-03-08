@@ -15,10 +15,12 @@ jobs:
   run-check-test:
     name: Run Check-Test Workflow
     uses: cyberops7/discord-bot/.github/workflows/check-test.yaml@main
-    with: {}
+    with:
+      skip_check_version: true
 
   docker-publish:
     name: Build and Push Image
+    needs: run-check-test
     runs-on: ubuntu-latest
 
     steps:
