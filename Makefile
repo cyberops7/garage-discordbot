@@ -4,6 +4,7 @@ help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
 .DEFAULT_GOAL := help
+IMAGE ?= ghcr.io/cyberops7/discord_bot_test
 SCRIPTS_DIR := $(shell git rev-parse --show-toplevel)/scripts
 SCANNER ?= trivy
 TAG ?= test
@@ -57,5 +58,5 @@ test:  ## Run pytest unit testing in the local environment
 	@bash $(SCRIPTS_DIR)/test.sh
 
 .PHONY: test-docker
-test-docker:  ## Run pytest unit testing inside a test Docker image
-	@bash $(SCRIPTS_DIR)/test.sh --docker
+test-docker:  ## Run pytest unit testing inside a test Docker image, with variables: IMAGE and TAG
+	@bash $(SCRIPTS_DIR)/test.sh --docker --image $(IMAGE) --tag $(TAG)

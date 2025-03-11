@@ -154,16 +154,13 @@ jobs:
           file: ./docker/Dockerfile-test
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: localhost:5000/unit-test:unit-test
-
-      - name: Retag Docker image
-        run: |
-          docker tag localhost:5000/unit-test:unit-test \
-          ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}_test:unit-test
+          tags: localhost:5000/${{ github.repository_owner }}/${{ github.event.repository.name }}:test
 
       # Run tests inside the Docker image
       - name: Run Tests in Docker Container
-        run: make test-docker  # need to add a flag to
+        run: |
+          make test-docker \
+          IMAGE=localhost:5000/${{ github.repository_owner }}/${{ github.event.repository.name }} TAG=test
 
   # Make sure the container builds and passes basic tests
   docker-build-test:

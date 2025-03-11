@@ -21,8 +21,29 @@ while [[ "$#" -gt 0 ]]; do
         --help|-h)
             echo "Usage: $0 [--docker | -d]"
             echo "Options:"
-            echo "  --docker, -d   Run tests inside the unit-test Docker image."
+            echo "  --docker, -d                Run tests inside the unit-test Docker image."
+            echo "  --image <image_name>, -i    Specify a custom Docker image name for testing."
+            echo "  --tag <tag>, -t             Specify a custom tag for the Docker image."
+
             exit 0
+            ;;
+        --image|-i)
+            if [[ -n "$2" && "$2" != -* ]]; then
+                IMAGE_NAME="$2"
+                shift 2
+            else
+                error "The --image flag requires a value."
+                exit 1
+            fi
+            ;;
+        --tag|-t)
+            if [[ -n "$2" && "$2" != -* ]]; then
+                TAG="$2"
+                shift 2
+            else
+                error "The --tag flag requires a value."
+                exit 1
+            fi
             ;;
         *)
             error "Unknown option: $1"
