@@ -134,10 +134,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Capture the PR number as an environment variable
-      - name: Set PR Number
-        run: echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
-
       # Set up Docker Buildx (for multi-platform builds)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -149,10 +145,14 @@ jobs:
         with:
           context: .
           file: ./docker/Dockerfile-test
-          load: true
           platforms: linux/amd64,linux/arm64
-          push: false
-          tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}_test:unit-test
+          push: true
+          tags: localhost:5000/unit-test:unit-test
+
+      - name: Retag Docker image
+        run: |
+          docker tag localhost:5000/unit-test:unit-test \
+          ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}_test:unit-test
 
       # Run tests inside the Docker image
       - name: Run Tests in Docker Container
