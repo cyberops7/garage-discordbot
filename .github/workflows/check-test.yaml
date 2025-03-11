@@ -25,7 +25,7 @@ jobs:
     steps:
       # Check out the code repository
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       # Install uv
       - name: Install uv
@@ -78,7 +78,7 @@ jobs:
 
       # Check out the pull request code
       - name: Checkout the PR branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
 
@@ -132,16 +132,18 @@ jobs:
     steps:
       # Check out the code repository
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Set up Docker Buildx (for multi-platform builds)
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: network=host
 
       # Build the Docker image (without pushing it)
       # Need to have a test dockerfile that includes the test files and dev dependencies
       - name: Build Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./docker/Dockerfile-test
@@ -166,7 +168,7 @@ jobs:
     steps:
       # Check out the code repository
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Capture the PR number as an environment variable
       - name: Set PR Number
@@ -174,11 +176,11 @@ jobs:
 
       # Set up Docker Buildx (for multi-platform builds)
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
       # Build the Docker image (without pushing it)
       - name: Build Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./docker/Dockerfile

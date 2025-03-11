@@ -29,6 +29,11 @@
       - [ ] For docker compose, you'll need to put your .env file in the same directory as your compose file
         The current sample.env in the docker dir is a symlink to the one in the repository root
   
+
+- Miscellaneous
+  - [ ] Add new dep group to `uv` for unit testing packages so we don't have to install all the linting deps
+    into the test image
+
   
 - Makefile / Core Functions
   - `make build`
