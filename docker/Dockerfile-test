@@ -1,0 +1,54 @@
+# Stage 1: Build Stage
+FROM python:3.13-alpine
+LABEL org.opencontainers.image.description="A version of the discord_bot image for unit testing"
+LABEL org.opencontainers.image.source=https://github.com/cyberops7/discord_bot
+
+# Set up default env vars
+ENV API_PORT=8080 \
+    APP_HOME=/app \
+    LOG_DIR=/app/log \
+    LOG_FILE=bot.log \
+    LOG_LEVEL_FILE=INFO \
+    LOG_LEVEL_STDOUT=INFO \
+    PATH="/root/.local/bin:$PATH" \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# Update base packages and install Alpine dependencies
+RUN apk -U upgrade --no-cache && \
+    apk add --no-cache \
+        bash \
+        curl \
+        gcc \
+        jq \
+        linux-headers \
+        make \
+        musl-dev
+
+# Install `uv`
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+# Copy files
+RUN mkdir -p $APP_HOME
+COPY pyproject.toml uv.lock $APP_HOME
+COPY docker/test-entrypoint.sh $APP_HOME
+RUN chmod +x $APP_HOME/test-entrypoint.sh
+
+# Create application directory and set permissions
+RUN mkdir -p $LOG_DIR && \
+    addgroup --system appgroup && \
+    adduser --system appuser --ingroup appgroup --home $APP_HOME && \
+    chown -R appuser:appgroup $APP_HOME
+
+# Set working directory
+WORKDIR $APP_HOME
+
+# Switch to non-root user
+USER appuser
+
+# Create the venv and install both runtime and dev dependencies
+RUN uv sync --frozen --no-cache && \
+    rm $APP_HOME/pyproject.toml $APP_HOME/uv.lock
+
+# Run the tests
+ENTRYPOINT ["./test-entrypoint.sh"]

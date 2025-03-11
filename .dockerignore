@@ -24,3 +24,4 @@ tests/
 .yamllint.yaml
 sample.env
 Makefile
+!docker/test-entrypoint.sh

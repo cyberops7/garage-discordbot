@@ -17,6 +17,7 @@ info "Repo directory: ${REPO_DIR}"
 CONTEXT="${REPO_DIR}"
 DOCKERFILE="${REPO_DIR}/docker/Dockerfile"
 IMAGE_NAME=ghcr.io/cyberops7/discord_bot
+IMAGE_NAME_TEST=ghcr.io/cyberops7/discord_bot_test
 
 # Default values
 CACHE_FLAG="--no-cache"     # Default behavior is to disable caching
@@ -39,6 +40,7 @@ while [[ "$#" -gt 0 ]]; do
             echo "  --local               Export the built image from the buildx builder to the local Docker daemon."
             echo "  --push                Enable pushing the image to the registry."
             echo "  --tag,   -t <tag>     Specify the image tag (default: 'test-YYYYMMDD')."
+            echo "  --test                Build the version of the image for unit testing."
             exit 0
             ;;
         --local)
@@ -52,12 +54,17 @@ while [[ "$#" -gt 0 ]]; do
         --tag|-t)
             # Check if the next argument exists and isn't empty or another flag
             if [[ -z "$2" || "$2" == -* ]]; then
-                echo "Error: '--tag' option requires a value."
-                echo "Run '$0 --help' for usage information."
+                error "Error: '--tag' option requires a value."
+                info "Run '$0 --help' for usage information."
             exit 1
             fi
             TAG="$2"
             shift 2
+            ;;
+        --test)
+            DOCKERFILE="${REPO_DIR}/docker/Dockerfile-test"
+            IMAGE_NAME=${IMAGE_NAME_TEST}
+            shift
             ;;
         *)
             error "Unknown option: $1"
@@ -67,6 +74,7 @@ while [[ "$#" -gt 0 ]]; do
     esac
 done
 
+info "Building image: ${IMAGE_NAME} from ${DOCKERFILE}"
 info "Using tag: ${TAG}"
 
 # Set up the Docker buildx builder for multiarch builds

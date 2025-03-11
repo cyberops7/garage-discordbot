@@ -14,11 +14,11 @@ on:  # yamllint disable-line rule:truthy
         type: string
 
 env:
-  UV_VERSION: "0.6.4"  # Global variable for UV version
+  UV_VERSION: "0.6.5"  # Global variable for UV version
 
 jobs:
   # Run code quality checks
-  check:
+  code-checks:
     name: Lint and Static Analysis
     runs-on: ubuntu-latest
 
@@ -124,8 +124,8 @@ jobs:
           Main: ${{ env.main_version }})."
           fi
 
-  # Make sure the container builds and passes basic tests
-  docker-build-test:
+  # Run unit tests inside a representative Docker image
+  unit-tests:
     name: Build and Test Docker Image
     runs-on: ubuntu-latest
 
@@ -148,11 +148,39 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          file: ./docker/Dockerfile-test
+          platforms: linux/amd64,linux/arm64
+          push: false
+          tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}_test:unit-test
+
+      # Run tests inside the Docker image
+      - name: Run Tests in Docker Container
+        run: make test-docker  # need to add a flag to
+
+  # Make sure the container builds and passes basic tests
+  docker-build-test:
+    name: Build and Test Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the code repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Capture the PR number as an environment variable
+      - name: Set PR Number
+        run: echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+
+      # Set up Docker Buildx (for multi-platform builds)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Build the Docker image (without pushing it)
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
           file: ./docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: false
           tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:pr-${{ env.pr_number }}
-
-      # Run tests inside the Docker image
-      - name: Run Tests in Docker Container
-        run: make test  # need to add a flag to

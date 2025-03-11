@@ -17,6 +17,8 @@
     - [ ] Add hyperlinks to tools table
     - Testing
       - [ ] How to run locally
+      - `make build-test`
+      - `make test-docker`
     - [ ] Update the `version` in `pyproject.toml`
   - README
     - [ ] Bot features

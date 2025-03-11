@@ -9,8 +9,12 @@ SCANNER ?= trivy
 TAG ?= test
 
 .PHONY: build
-build: deps clean ## Build the Docker image with variable: TAG
+build: deps clean ## Build the Docker image with variable: TAG (defaults to "test")
 	@bash $(SCRIPTS_DIR)/build.sh --tag $(TAG) --local
+
+.PHONY: build-test
+build-test: deps clean ## Build the unit test Docker image with variable: TAG (defaults to "unit-test")
+	@bash $(SCRIPTS_DIR)/build.sh --tag "unit-test" --local --test
 
 .PHONY: check
 check: ## Run linters and other code quality checks
@@ -49,5 +53,9 @@ scan: deps ## Scan the Docker image for vulnerabilities - variables: TAG and SCA
 	@bash $(SCRIPTS_DIR)/scan.sh --tag $(TAG) --scanner $(SCANNER)
 
 .PHONY: test
-test:  ## Run pytest unit testing
+test:  ## Run pytest unit testing in the local environment
 	@bash $(SCRIPTS_DIR)/test.sh
+
+.PHONY: test-docker
+test-docker:  ## Run pytest unit testing inside a test Docker image
+	@bash $(SCRIPTS_DIR)/test.sh --docker
