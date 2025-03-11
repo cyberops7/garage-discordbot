@@ -126,7 +126,7 @@ jobs:
 
   # Run unit tests inside a representative Docker image
   unit-tests:
-    name: Build and Test Docker Image
+    name: Run Unit Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -149,6 +149,7 @@ jobs:
         with:
           context: .
           file: ./docker/Dockerfile-test
+          load: true
           platforms: linux/amd64,linux/arm64
           push: false
           tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}_test:unit-test
