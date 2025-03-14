@@ -166,12 +166,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Capture the PR number as an environment variable
+      # Set up any needed environment variables
       - name: Set Env Vars
         run: |
           echo "Set up env vars"
-          echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
-          echo "image_name=localhost:5000/${{ github.event.repository.name }}:pr-${{ env.pr_number }}" >> $GITHUB_ENV
+          IMAGE_NAME="localhost:5000/${{ github.event.repository.name }}"
+          echo "image=${IMAGE_NAME}:pr-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
 
       # Set up Docker Buildx (for multi-platform builds)
       - name: Set up Docker Buildx
@@ -187,7 +187,7 @@ jobs:
           file: ./docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.image_name }}
+          tags: ${{ env.image }}
 
       # Install trivy
       - name: Manual Trivy Setup
@@ -197,4 +197,4 @@ jobs:
       - name: Scan Docker image
         run: |
           echo "Scanning image..."
-          trivy image ${{ env.image_name }}
+          trivy image ${{ env.image }}
