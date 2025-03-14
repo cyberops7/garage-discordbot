@@ -45,7 +45,7 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # Define the full image name
-IMAGE="{$IMAGE}:{$TAG}"
+IMAGE="${IMAGE}:${TAG}"
 
 info "Selected scanner: ${SCANNER}"
 info "Targeted image: ${IMAGE}"
