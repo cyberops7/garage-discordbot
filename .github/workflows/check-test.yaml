@@ -138,7 +138,8 @@ jobs:
         run: |
           echo "Set up env vars"
           IMAGE_NAME="localhost:5000/${{ github.repository_owner }}/${{ github.event.repository.name }}_test"
-          echo "image=${IMAGE_NAME}:test" >> $GITHUB_ENV
+          echo "image=${IMAGE_NAME}" >> $GITHUB_ENV
+          echo "tag=test" >> $GITHUB_ENV
 
       # Set up Docker Buildx (for multi-platform builds)
       - name: Set up Docker Buildx
@@ -154,13 +155,13 @@ jobs:
           file: ./docker/Dockerfile-test
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.image }}
+          tags: ${{ env.image }}:${{ env.tag }}
 
       # Run tests inside the test Docker image
       - name: Run Tests in Docker Container
         run: |
           echo "Running unit tests..."
-          make test-docker IMAGE=${{ env.image }}
+          make test-docker IMAGE=${{ env.image }} TAG=${{ env.tag }}
 
   # Make sure the container builds and passes vuln scan
   docker-build-scan:
@@ -182,7 +183,8 @@ jobs:
         run: |
           echo "Set up env vars"
           IMAGE_NAME="localhost:5000/${{ github.repository_owner }}/${{ github.event.repository.name }}"
-          echo "image=${IMAGE_NAME}:pr-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+          echo "image=${IMAGE_NAME}" >> $GITHUB_ENV
+          echo "tag=pr-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
 
       # Set up Docker Buildx (for multi-platform builds)
       - name: Set up Docker Buildx
@@ -198,7 +200,7 @@ jobs:
           file: ./docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.image }}
+          tags: ${{ env.image }}:${{ env.tag }}
 
       # Install trivy
       - name: Manual Trivy Setup
@@ -208,4 +210,4 @@ jobs:
       - name: Scan Docker image
         run: |
           echo "Scanning image..."
-          trivy image ${{ env.image }}
+          make scan IMAGE=${{ env.image }} TAG=${{ env.tag }} SCANNER=trivy
