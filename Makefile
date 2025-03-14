@@ -4,13 +4,18 @@ help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
 .DEFAULT_GOAL := help
+IMAGE ?= ghcr.io/cyberops7/discord_bot_test
 SCRIPTS_DIR := $(shell git rev-parse --show-toplevel)/scripts
 SCANNER ?= trivy
 TAG ?= test
 
 .PHONY: build
-build: deps clean ## Build the Docker image with variable: TAG
+build: deps clean ## Build the Docker image with variable: TAG (defaults to "test")
 	@bash $(SCRIPTS_DIR)/build.sh --tag $(TAG) --local
+
+.PHONY: build-test
+build-test: deps clean ## Build the unit test Docker image with variable: TAG (defaults to "test")
+	@bash $(SCRIPTS_DIR)/build.sh --tag $(TAG) --local --test
 
 .PHONY: check
 check: ## Run linters and other code quality checks
@@ -45,5 +50,13 @@ run: deps clean ## Run the Docker image locally with variable: TAG
 	@bash $(SCRIPTS_DIR)/run.sh --tag $(TAG)
 
 .PHONY: scan
-scan: deps ## Scan the Docker image for vulnerabilities - variables: TAG and SCANNER
-	@bash $(SCRIPTS_DIR)/scan.sh --tag $(TAG) --scanner $(SCANNER)
+scan: deps ## Scan the Docker image for vulnerabilities - variables: IMAGE, TAG, and SCANNER
+	@bash $(SCRIPTS_DIR)/scan.sh --image $(IMAGE) --tag $(TAG) --scanner $(SCANNER)
+
+.PHONY: test
+test:  ## Run pytest unit testing in the local environment
+	@bash $(SCRIPTS_DIR)/test.sh
+
+.PHONY: test-docker
+test-docker:  ## Run pytest unit testing inside a test Docker image, with variables: IMAGE and TAG
+	@bash $(SCRIPTS_DIR)/test.sh --docker --image $(IMAGE) --tag $(TAG)

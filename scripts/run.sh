@@ -9,7 +9,7 @@ source "${REPO_DIR}/scripts/logger.sh"
 
 # Default tag value
 CONTAINER_NAME=bot-test
-IMAGE="ghcr.io/cyberops7/discord-bot"
+IMAGE="ghcr.io/cyberops7/discord_bot"
 TAG="test-$(date +%Y%m%d)" # Initialize TAG with default
 
 # Parse arguments
