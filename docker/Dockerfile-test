@@ -30,7 +30,7 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Copy files
 RUN mkdir -p $APP_HOME
-COPY pyproject.toml uv.lock $APP_HOME
+COPY pyproject.toml uv.lock $APP_HOME/
 COPY docker/test-entrypoint.sh $APP_HOME
 RUN chmod +x $APP_HOME/test-entrypoint.sh
 
@@ -47,7 +47,7 @@ WORKDIR $APP_HOME
 USER appuser
 
 # Create the venv and install both runtime and dev dependencies
-RUN uv sync --frozen --no-cache && \
+RUN uv sync --frozen --no-cache --no-group dev && \
     rm $APP_HOME/pyproject.toml $APP_HOME/uv.lock
 
 # Run the tests

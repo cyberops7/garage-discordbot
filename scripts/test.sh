@@ -1,14 +1,12 @@
 #!/usr/bin/env bash
 
-set -ex
-
 REPO_DIR="$(git rev-parse --show-toplevel)"
 
 source "${REPO_DIR}/scripts/logger.sh"
 
 # Default values
 IMAGE_NAME="ghcr.io/cyberops7/discord_bot_test"  # Docker image name for tests
-TAG="unit-test"                                 # Default tag for the image
+TAG="test"                                       # Default tag for the image
 USE_DOCKER=false
 
 # Parse arguments

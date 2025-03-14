@@ -14,8 +14,8 @@ build: deps clean ## Build the Docker image with variable: TAG (defaults to "tes
 	@bash $(SCRIPTS_DIR)/build.sh --tag $(TAG) --local
 
 .PHONY: build-test
-build-test: deps clean ## Build the unit test Docker image with variable: TAG (defaults to "unit-test")
-	@bash $(SCRIPTS_DIR)/build.sh --tag "unit-test" --local --test
+build-test: deps clean ## Build the unit test Docker image with variable: TAG (defaults to "test")
+	@bash $(SCRIPTS_DIR)/build.sh --tag $(TAG) --local --test
 
 .PHONY: check
 check: ## Run linters and other code quality checks

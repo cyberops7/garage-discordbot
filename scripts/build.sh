@@ -35,11 +35,11 @@ while [[ "$#" -gt 0 ]]; do
         --help|-h)
             echo "Usage: $0 [--tag <tag>] [--push] [--cache]"
             echo "Options:"
-            echo "  --help,  -h           Show this help message and exit."
+            echo "  --help, -h            Show this help message and exit."
             echo "  --cache               Enable Docker caching (default is no cache)."
             echo "  --local               Export the built image from the buildx builder to the local Docker daemon."
             echo "  --push                Enable pushing the image to the registry."
-            echo "  --tag,   -t <tag>     Specify the image tag (default: 'test-YYYYMMDD')."
+            echo "  --tag, -t <tag>       Specify the image tag (default: 'test-YYYYMMDD')."
             echo "  --test                Build the version of the image for unit testing."
             exit 0
             ;;

@@ -34,15 +34,9 @@ jobs:
           # Install a specific version of uv.
           version: ${{ env.UV_VERSION }}
 
-      # Install Python
-      - name: Install Python
-        uses: actions/setup-python@v5
-        with:
-          python-version-file: ".python-version"
-
-      # Install dependencies
+      # Install dependencies (including Python)
       - name: Install the project
-        run: uv sync --dev
+        run: uv sync --frozen --no-group test
 
       # Install trivy
       - name: Manual Trivy Setup
@@ -145,8 +139,7 @@ jobs:
         with:
           driver-opts: network=host
 
-      # Build the Docker image (without pushing it)
-      # Need to have a test dockerfile that includes the test files and dev dependencies
+      # Build the test Docker image (push to local registry)
       - name: Build Docker image
         uses: docker/build-push-action@v6
         with:
@@ -154,17 +147,18 @@ jobs:
           file: ./docker/Dockerfile-test
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: localhost:5000/${{ github.repository_owner }}/${{ github.event.repository.name }}:test
+          tags: localhost:5000/${{ github.repository_owner }}/${{ github.event.repository.name }}_test:test
 
-      # Run tests inside the Docker image
+      # Run tests inside the test Docker image
       - name: Run Tests in Docker Container
         run: |
+          echo "Running unit tests"
           make test-docker \
-          IMAGE=localhost:5000/${{ github.repository_owner }}/${{ github.event.repository.name }} TAG=test
+          IMAGE=localhost:5000/${{ github.repository_owner }}/${{ github.event.repository.name }}_test TAG=test
 
-  # Make sure the container builds and passes basic tests
-  docker-build-test:
-    name: Build and Test Docker Image
+  # Make sure the container builds and passes vuln scan
+  docker-build-scan:
+    name: Build and Scan Docker Image
     runs-on: ubuntu-latest
 
     steps:
@@ -173,19 +167,34 @@ jobs:
         uses: actions/checkout@v4
 
       # Capture the PR number as an environment variable
-      - name: Set PR Number
-        run: echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+      - name: Set Env Vars
+        run: |
+          echo "Set up env vars"
+          echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+          echo "image_name=localhost:5000/${{ github.event.repository.name }}:\pr${{ env.pr_number }}" >> $GITHUB_ENV
 
       # Set up Docker Buildx (for multi-platform builds)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: network=host
 
-      # Build the Docker image (without pushing it)
+      # Build the Docker image (push to local registry)
       - name: Build Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./docker/Dockerfile
           platforms: linux/amd64,linux/arm64
-          push: false
-          tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:pr-${{ env.pr_number }}
+          push: true
+          tags: ${{ env.image_name }}
+
+      # Install trivy
+      - name: Manual Trivy Setup
+        uses: aquasecurity/setup-trivy@v0.2.0
+
+      # Run vuln scans on the Docker image
+      - name: Scan Docker image
+        run: |
+          echo "Scanning image..."
+          trivy image ${{ env.image_name }}
